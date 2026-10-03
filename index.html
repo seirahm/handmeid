@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Handmei'd</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <!-- Google Fonts Preconnect and Links -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&family=Quicksand:wght@300..700&display=swap" rel="stylesheet">
+
+  <style>
+    /* Makes the scrolling smooth when clicking navigation links */
+    html {
+      scroll-behavior: smooth;
+    }
+
+    /* Navigation Bar Styling */
+    .navbar {
+      background-color: white;
+      border-bottom: 3px solid #ff8b94;
+      padding: 15px 10px;
+      text-align: center;
+      position: sticky;
+      top: 0;
+      z-index: 2000;
+    }
+
+    .navbar a {
+      font-family: 'Fredoka', sans-serif;
+      font-weight: 500;
+      color: #ffaaa5;
+      text-decoration: none;
+      margin: 0 15px;
+      font-size: 16px;
+      transition: color 0.2s;
+    }
+
+    .navbar a:hover {
+      color: #ff8b94;
+    }
+
+    /* Home Page Non-Clickable Gallery Layout */
+    .home-gallery {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      max-width: 800px;
+      margin: 0 auto 30px auto;
+      padding: 0 10px;
+    }
+
+    /* Individual wrapper for the home photos */
+    .home-pic-wrapper {
+      flex: 1 1 calc(33.33% - 10px); /* Displays exactly 3 items per row */
+      box-sizing: border-box;
+    }
+
+    /* Plain, non-clickable image rules */
+    .view-only-pic {
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 12px;
+      border: 3px solid #ff8b94;
+    }
+
+    /* Section Category Headings */
+    .section-title {
+      width: 100%;
+      text-align: center;
+      color: #ff8b94;
+      font-family: 'Fredoka', sans-serif;
+      font-size: 28px;
+      margin: 40px 0 10px 0;
+    }
+
+    /* Interactive Product Gallery Grid Layout */
+    .gallery-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      max-width: 800px;
+      margin: 0 auto 100px auto;
+      padding: 0 10px;
+    }
+
+    /* Individual interactive product card wrapper */
+    .product-card {
+      flex: 1 1 calc(50% - 10px); /* Displays exactly 2 items per row */
+      box-sizing: border-box;
+      background-color: white;
+      padding: 15px;
+      border: 3px solid #ff8b94;
+      border-radius: 15px;
+    }
+
+    /* Clickable image rules */
+    .clickable-pic {
+      width: 100%;
+      height: auto;
+      cursor: pointer;
+      border-radius: 8px;
+      transition: opacity 0.2s;
+    }
+    .clickable-pic:hover {
+      opacity: 0.8;
+    }
+    
+    /* Interactive info boxes */
+    .hidden-info {
+      display: none;
+      margin-top: 12px;
+      padding: 10px;
+      background-color: #fff5f5;
+      border-left: 5px solid #ff8b94;
+      border-radius: 4px;
+      font-family: 'Quicksand', sans-serif;
+    }
+
+    .hidden-info h4 {
+      margin: 0 0 5px 0;
+      color: #ff8b94;
+    }
+
+    .hidden-info p {
+      margin: 0;
+      color: #ffaaa5;
+      font-size: 15px;
+    }
+
+    /* Phone responsive overrides */
+    @media (max-width: 600px) {
+      .product-card {
+        flex: 1 1 100%;
+      }
+      .home-pic-wrapper {
+        flex: 1 1 calc(50% - 8px); /* Drops to 2 photos per row on mobile for space */
+      }
+      .navbar a {
+        display: inline-block;
+        margin: 5px 10px;
+      }
+    }
+  </style>
+</head>
+<body style="background-color: #E6E6FA; background-size: contain; margin: 0; padding: 0 0 10px 0;">
+
+  <!-- TOP NAVIGATION BAR -->
+  <nav class="navbar">
+    <a href="#home">Home</a>
+    <a href="#bouquets">Bouquets</a>
+    <a href="#keychains">Keychains</a>
+    <a href="#bundles">Bundles</a>
+    <a href="#about">About Handmei'd</a>
+  </nav>
+
+  <!-- HOME SECTION -->
+  <div id="home" style="scroll-margin-top: 80px;">
+    <!-- TITLE -->
+   <h1 style="font-family: 'Fredoka', sans-serif; font-weight: 700; font-size: 64px; color: #ff8b94; text-align: center; margin: 20px 0 30px 0; text-shadow: 3px 3px 0 white;">
+    H❤ndMei'd
+  </h1>
+   <h2 style="color: #ff8b94; margin-top: 0; font-family: 'Fredoka', sans-serif; font-size: 28px; text-align: center;">HOME</h2>
+
+    <!-- HOME PAGE VIEW-ONLY GALLERY (20 Pictures total) -->
+    <div class="home-gallery">
+      <div class="home-pic-wrapper"><img class="view-only-pic" src="home1.png" alt="Showcase Image 1"></div>
+      <div class="home-pic-wrapper"><img class="view-only-pic" src="home2.png" alt="Showcase Image 2"></div>
+      <div class="home-pic-wrapper"><img class="view-only-pic" src="home3.png" alt="Showcase Image 3"></div>
+      <div class="home-pic-wrapper"><img class="view-only-pic" src="home4.png" alt="Showcase Image 4"></div>
+      <div class="home-pic-wrapper"><img class="view-only-pic" src="home5.png" alt="Showcase Image 5"></div>
+      <div class="home-pic-wrapper"><img class="view-only-pic" src="home6.png" alt="Showcase Image 6"></div>
+      <div class="home-pic-wrapper"><img class="view-only-pic" src="home7.png" alt="Showcase Image 7"></div>
+      <div class="home-pic-wrapper"><img class="view-only-pic" src="home8.png" alt="Showcase Image 8"></div>
+      <div class="home-pic-wrapper"><img class="view-only-pic" src="home9.png" alt="Showcase Image 9"></div>
+      <div class="home-pic-wrapper"><img class="view-only-pic" src="home10.png" alt="Showcase Image 10"></div>
+      <div class="home-pic-wrapper"><img class="view-only-pic" src="home11.png" alt="Showcase Image 11"></div>
+      <div class="home-pic-wrapper"><img class="view-only-pic" src="home12.png" alt="Showcase Image 12"></div>
+      <div class="home-pic-wrapper"><img class="view-only-pic" src="home13.png" alt="Showcase Image 13"></div>
+      <div class="home-pic-wrapper"><img class="view-only-pic" src="home14.png" alt="Showcase Image 14"></div>
+      <div class="home-pic-wrapper"><img class="view-only-pic" src="home15.png" alt="Showcase Image 15"></div>
+      <div class="home-pic-wrapper"><img class="view-only-pic" src="home16.png" alt="Showcase Image 16"></div>
+      <div class="home-pic-wrapper"><img class="view-only-pic" src="home17.png" alt="Showcase Image 17"></div>
+      <div class="home-pic-wrapper"><img class="view-only-pic" src="home18.png" alt="Showcase Image 18"></div>
+    </div>
+  </div>
+
+  <!-- CREATIONS HEADER -->
+  <h2 style="text-align: center; color: #ff8b94; margin: 40px 0 10px 0; font-family: 'Fredoka', sans-serif; font-size: 28px;">
+      Want to see some of my creations?
+  </h2>
+  <p style="font-family: 'Quicksand', sans-serif; color: #ffaaa5; font-size: 16px; text-align: center; margin: 0 0 20px 0;">
+      Click any product below to view details!
+  </p>
+
+  <!-- PRODUCT GALLERY GRID -->
+  <div class="gallery-grid">
+
+    <!-- BOUQUETS TITLE & SECTION -->
+    <h2 id="bouquets" class="section-title" style="scroll-margin-top: 80px;">BOUQUETS</h2>
+    
+     <!-- Product 1 -->
+    <div class="product-card">
+      <img class="clickable-pic" src="1.png" alt="Product 1">
+      <div class="hidden-info">
+        <h4>Large Flower Bouquet</h4>
+        <p>Made by love and fuzzy wires!</p>
+      </div>
+    </div>
+
+    <!-- Product 2 -->
+    <div class="product-card">
+      <img class="clickable-pic" src="2.png" alt="Product 2">
+      <div class="hidden-info">
+        <h4>Flower Bouquet</h4>
+        <p>Made by love and fuzzy wires!</p>
+      </div>
+    </div>
+
+    <!-- Product 3 -->
+    <div class="product-card">
+      <img class="clickable-pic" src="3.png" alt="Product 3">
+      <div class="hidden-info">
+        <h4>Mini Flower Bouquet</h4>
+        <p>Made by love and fuzzy wires!</p>
+      </div>
+    </div>
+
+    <!-- KEYCHAINS TITLE & SECTION -->
+    <h2 id="keychains" class="section-title" style="scroll-margin-top: 80px;">KEYCHAINS</h2>
+
+    <!-- Product 4 -->
+    <div class="product-card">
+      <img class="clickable-pic" src="4.png" alt="Product 4">
+      <div class="hidden-info">
+        <h4>Fuzzy Wire Keychains</h4>
+        <p>Made by love and fuzzy wires!</p>
+      </div>
+    </div>
+
+    <!-- Product 5 -->
+    <div class="product-card">
+      <img class="clickable-pic" src="5.png" alt="Product 5">
+      <div class="hidden-info">
+        <h4>Denim Keychains</h4>
+        <p>Made by love and recycled denim!</p>
+      </div>
+    </div>
+	
+	<h2 id="bundles" class="section-title" style="scroll-margin-top: 80px;">BUNDLES</h2>
+    
+     <!-- Product 1 -->
+    <div class="product-card">
+      <img class="clickable-pic" src="b1.png" alt="Product 1">
+      <div class="hidden-info">
+        <h4>Large Flower BouquetXDenim Keychain</h4>
+        <p>CuteXCute=Hapiness</p>
+      </div>
+    </div>
+
+    <!-- Product 2 -->
+    <div class="product-card">
+      <img class="clickable-pic" src="b2.png" alt="Product 2">
+      <div class="hidden-info">
+        <h4>Large Flower BouquetXFuzzy Wire Keychain</h4>
+        <p>CuteXCute=Hapiness</p>
+      </div>
+    </div>
+
+    <!-- Product 3 -->
+    <div class="product-card">
+      <img class="clickable-pic" src="b3.png" alt="Product 3">
+      <div class="hidden-info">
+        <h4>Flower BouquetXDenim Keychain</h4>
+        <p>CuteXCute=Hapiness</p>
+      </div>
+    </div>
+	
+	<!-- Product 4 -->
+    <div class="product-card">
+      <img class="clickable-pic" src="b4.png" alt="Product 4">
+      <div class="hidden-info">
+        <h4>Flower BouquetXFuzzy Wire Keychain</h4>
+        <p>CuteXCute=Hapiness</p>
+      </div>
+    </div>
+
+    <!-- Product 5 -->
+    <div class="product-card">
+      <img class="clickable-pic" src="b5.png" alt="Product 5">
+      <div class="hidden-info">
+        <h4>Mini Flower BouquetXDenim Keychain</h4>
+        <p>CuteXCute=Hapiness</p>
+      </div>
+    </div>
+	
+	<!-- Product 6 -->
+    <div class="product-card">
+      <img class="clickable-pic" src="b6.png" alt="Product 6">
+      <div class="hidden-info">
+        <h4>Mini Flower BouquetXFuzzy Wire Keychain</h4>
+        <p>CuteXCute=Hapiness</p>
+      </div>
+    </div>
+	
+	<!-- STICKY FACEBOOK BUTTON -->
+  <div style="position: fixed; bottom: 20px; right: 20px; z-index: 1000;">
+    <a href="https://www.facebook.com/profile.php?id=61582801926748" target="_blank">
+        <img src="fb.png" width="70" alt="Visit my Facebook Page" style="border-radius: 15px; border: 2px solid #ff8b94; display: block;">
+    </a>
+</div>
+
+  <!-- SINGLE INTERACTIVE GALLERY SCRIPT -->
+  <script>
+    const cards = document.querySelectorAll('.product-card');
+
+    cards.forEach(card => {
+      const picture = card.querySelector('.clickable-pic');
+      const infoBox = card.querySelector('.hidden-info');
+
+      if (picture && infoBox) {
+        picture.addEventListener('click', function() {
+          // Accurately checks what display state the browser is seeing right now
+          if (window.getComputedStyle(infoBox).display === 'none') {
+            infoBox.style.display = 'block';
+          } else {
+            infoBox.style.display = 'none';
+          }
+        });
+      }
+    });
+  </script>
+  
+  <!-- HERO ROW INFO BOXES -->
+<div style="display: flex; flex-wrap: wrap; align-items: stretch; gap: 10px; max-width: 800px; margin: 0 auto 30px auto; padding: 0 10px;">
+
+    <!-- LEFT BOX (About Section Anchor) -->
+    <div id="about" style="scroll-margin-top: 80px; flex: 1 1 100%; background-color: white; padding: 30px; border: 3px solid #ff8b94; border-radius: 15px; font-family: Arial, sans-serif; box-sizing: border-box; text-align: center;">
+        <h2 style="color: #ff8b94; margin-top: 0; font-family: 'Fredoka', sans-serif; font-size: 28px;">ABOUT HANDMEI'D</h2>
+        <p style="font-family: 'Quicksand', sans-serif; color: #ffaaa5; font-size: 18px; margin: 0; line-height: 1.6;">
+            Hi! I'm Meirah, a first-year college student and an artist. Welcome to my hub!
+            <br><br>H❤ndMei'd
+        </p>
+    </div>
+
+</div>
+
+</body>
+</html>
