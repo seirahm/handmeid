@@ -2,46 +2,91 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Handmei'd</title>
+  <title>Handmei'd | Handmade Bouquets &amp; Keychains</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  
-  <!-- Google Fonts Preconnect and Links -->
+  <meta name="description" content="Handmei'd: handmade fuzzy-wire bouquets, recycled denim keychains, and gift bundles. Order on our Facebook page.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🩷</text></svg>">
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&family=Quicksand:wght@300..700&display=swap" rel="stylesheet">
 
   <style>
-    /* Makes the scrolling smooth when clicking navigation links */
-    html {
-      scroll-behavior: smooth;
+    :root {
+      /* Soft Flower Shop palette */
+      --pink: #F7A8B8;
+      --pink-soft: #F9C9D1;
+      --pink-text: #6F555A;
+      --heading: #B56F7E;
+      --blush: #FFF7F3;
+      --lavender: #FFF9F0;
+
+      --rose-pink: #F7A8B8;
+      --daffodil: #F9E79F;
+      --sage: #B7D7B0;
+      --powder-blue: #BFDDF5;
+      --cream: #FFF9F0;
     }
 
-    /* Navigation Bar Styling */
+    html { scroll-behavior: smooth; }
+
+    body {
+      background-color: var(--lavender);
+      margin: 0;
+      padding: 0;
+      font-family: 'Quicksand', sans-serif;
+      color: var(--pink-text);
+    }
+
+    /* NAVIGATION */
     .navbar {
       background-color: white;
-      border-bottom: 3px solid #ff8b94;
+      border-bottom: 3px solid var(--pink);
       padding: 15px 10px;
       text-align: center;
       position: sticky;
       top: 0;
       z-index: 2000;
     }
-
     .navbar a {
       font-family: 'Fredoka', sans-serif;
       font-weight: 500;
-      color: #ffaaa5;
+      color: var(--pink-text);
       text-decoration: none;
       margin: 0 15px;
       font-size: 16px;
       transition: color 0.2s;
     }
+    .navbar a:hover { color: var(--pink); }
 
-    .navbar a:hover {
-      color: #ff8b94;
+    /* HERO */
+    .hero-title {
+      font-family: 'Fredoka', sans-serif;
+      font-weight: 700;
+      font-size: 64px;
+      color: var(--pink);
+      text-align: center;
+      margin: 20px 0 5px 0;
+      text-shadow: 3px 3px 0 white;
+    }
+    .tagline {
+      text-align: center;
+      font-size: 18px;
+      font-weight: 500;
+      margin: 0 10px 25px 10px;
     }
 
-    /* Home Page Non-Clickable Gallery Layout */
+    .section-title {
+      width: 100%;
+      text-align: center;
+      color: var(--heading);
+      font-family: 'Fredoka', sans-serif;
+      font-size: 28px;
+      margin: 40px 0 10px 0;
+      scroll-margin-top: 80px;
+    }
+
+    /* HOME GALLERY */
     .home-gallery {
       display: flex;
       flex-wrap: wrap;
@@ -50,302 +95,915 @@
       margin: 0 auto 30px auto;
       padding: 0 10px;
     }
-
-    /* Individual wrapper for the home photos */
     .home-pic-wrapper {
-      flex: 1 1 calc(33.33% - 10px); /* Displays exactly 3 items per row */
+      flex: 1 1 calc(33.33% - 10px);
       box-sizing: border-box;
     }
-
-    /* Plain, non-clickable image rules */
     .view-only-pic {
       width: 100%;
       height: auto;
       display: block;
       border-radius: 12px;
-      border: 3px solid #ff8b94;
+      border: 3px solid var(--pink);
     }
 
-    /* Section Category Headings */
-    .section-title {
-      width: 100%;
+    /* PRODUCT GRID */
+    .intro-text {
       text-align: center;
-      color: #ff8b94;
-      font-family: 'Fredoka', sans-serif;
-      font-size: 28px;
-      margin: 40px 0 10px 0;
+      margin: 0 10px 20px 10px;
+      font-size: 16px;
     }
-
-    /* Interactive Product Gallery Grid Layout */
     .gallery-grid {
       display: flex;
       flex-wrap: wrap;
       gap: 20px;
       max-width: 800px;
-      margin: 0 auto 100px auto;
+      margin: 0 auto 30px auto;
       padding: 0 10px;
     }
-
-    /* Individual interactive product card wrapper */
     .product-card {
-      flex: 1 1 calc(50% - 10px); /* Displays exactly 2 items per row */
+      flex: 1 1 calc(50% - 10px);
       box-sizing: border-box;
       background-color: white;
       padding: 15px;
-      border: 3px solid #ff8b94;
+      border: 3px solid var(--pink);
       border-radius: 15px;
+      box-shadow: 0 6px 14px rgba(183, 148, 244, 0.3);
+      transition: transform 0.2s;
     }
+    .product-card:hover { transform: translateY(-4px); }
 
-    /* Clickable image rules */
     .clickable-pic {
       width: 100%;
       height: auto;
+      display: block;
       cursor: pointer;
       border-radius: 8px;
       transition: opacity 0.2s;
     }
-    .clickable-pic:hover {
-      opacity: 0.8;
-    }
-    
-    /* Interactive info boxes */
+    .clickable-pic:hover { opacity: 0.85; }
+    .clickable-pic:focus-visible { outline: 3px solid var(--pink); outline-offset: 3px; }
+
     .hidden-info {
       display: none;
       margin-top: 12px;
-      padding: 10px;
-      background-color: #fff5f5;
-      border-left: 5px solid #ff8b94;
+      padding: 12px;
+      background-color: var(--blush);
+      border-left: 5px solid var(--pink);
       border-radius: 4px;
-      font-family: 'Quicksand', sans-serif;
+    }
+    .hidden-info h4 {
+      margin: 0 0 6px 0;
+      color: var(--heading);
+      font-family: 'Fredoka', sans-serif;
+      font-size: 18px;
+    }
+    .hidden-info p {
+      margin: 0;
+      color: var(--pink-text);
+      font-size: 15px;
+      line-height: 1.5;
+    }
+    .hidden-info .order-hint {
+      margin-top: 8px;
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    /* INFO BOXES (ORDER + ABOUT) */
+    .info-wrap {
+      max-width: 800px;
+      margin: 0 auto 30px auto;
+      padding: 0 10px;
+    }
+    .info-box {
+      background-color: white;
+      padding: 30px;
+      border: 3px solid var(--pink);
+      border-radius: 15px;
+      box-sizing: border-box;
+      text-align: center;
+      box-shadow: 0 6px 14px rgba(183, 148, 244, 0.3);
+      scroll-margin-top: 80px;
+    }
+    .info-box h2 {
+      color: var(--heading);
+      margin-top: 0;
+      font-family: 'Fredoka', sans-serif;
+      font-size: 28px;
+    }
+    .info-box p {
+      font-size: 18px;
+      margin: 0 0 20px 0;
+      line-height: 1.6;
+    }
+    .info-box p:last-child { margin-bottom: 0; }
+
+    .order-btn {
+      display: inline-block;
+      background-color: var(--pink);
+      color: #3f2760;
+      font-family: 'Fredoka', sans-serif;
+      font-weight: 600;
+      font-size: 18px;
+      text-decoration: none;
+      padding: 12px 30px;
+      border-radius: 30px;
+      box-shadow: 0 4px 0 var(--pink-soft);
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .order-btn:hover {
+      transform: translateY(2px);
+      box-shadow: 0 2px 0 var(--pink-soft);
+    }
+
+    .steps {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 25px 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+    }
+    .steps li {
+      flex: 1 1 160px;
+      background-color: var(--blush);
+      border-radius: 12px;
+      padding: 12px;
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    /* PRICES */
+    .price {
+      display: inline-block;
+      margin: 12px 0 0 0;
+      padding: 5px 16px;
+      background-color: var(--pink-soft);
+      color: #5a1f45;
+      font-family: 'Fredoka', sans-serif;
+      font-weight: 600;
+      font-size: 16px;
+      border-radius: 30px;
+    }
+
+    /* CUSTOM ORDER NOTE */
+    .custom-note {
+      background-color: var(--blush);
+      border: 2px dashed var(--pink);
+      border-radius: 12px;
+      padding: 14px;
+      margin: 0 0 25px 0 !important;
+      font-size: 17px !important;
+    }
+
+    /* GIFT OCCASIONS */
+    .occasions {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 20px 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+    }
+    .occasions li {
+      background-color: var(--blush);
+      border: 2px solid var(--pink-soft);
+      border-radius: 30px;
+      padding: 8px 18px;
+      font-family: 'Fredoka', sans-serif;
+      font-weight: 500;
+      font-size: 16px;
+    }
+
+    /* BACK TO TOP BUTTON */
+    .back-to-top {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      z-index: 1000;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      border: 2px solid var(--pink);
+      background-color: white;
+      color: var(--heading);
+      font-family: 'Fredoka', sans-serif;
+      font-size: 22px;
+      line-height: 1;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(183, 148, 244, 0.35);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s;
+    }
+    .back-to-top.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .back-to-top:hover { background-color: var(--blush); }
+    .back-to-top:focus-visible { outline: 3px solid var(--pink); outline-offset: 3px; }
+
+    /* FOOTER */
+    .footer {
+      text-align: center;
+      font-size: 14px;
+      padding: 10px 10px 100px 10px;
+    }
+
+    /* STICKY FACEBOOK BUTTON */
+    .fb-fixed {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 1000;
+    }
+    .fb-fixed img {
+      border-radius: 15px;
+      border: 2px solid var(--pink);
+      display: block;
+    }
+
+    @media (max-width: 600px) {
+      .hero-title { font-size: 48px; }
+      .product-card { flex: 1 1 100%; }
+      .home-pic-wrapper { flex: 1 1 calc(50% - 8px); }
+      .navbar a { display: inline-block; margin: 5px 10px; }
+    }
+
+    /* PROFESSIONAL POLISH */
+    body {
+      background: linear-gradient(180deg, var(--cream) 0%, #fffdf9 45%, #fdf8f3 100%);
+      color: #5f5053;
+    }
+
+    .navbar {
+      background: rgba(255, 255, 255, 0.96);
+      border-bottom: 1px solid #eadbdd;
+      padding: 13px 20px;
+      box-shadow: 0 2px 12px rgba(95, 80, 83, 0.07);
+      backdrop-filter: blur(8px);
+    }
+
+    .navbar a {
+      position: relative;
+      display: inline-block;
+      color: #65575a;
+      margin: 0 13px;
+      padding: 7px 2px;
+      font-size: 15px;
+      letter-spacing: 0.2px;
+    }
+
+    .navbar a::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: 1px;
+      width: 0;
+      height: 2px;
+      border-radius: 10px;
+      background: var(--rose-pink);
+      transition: width 0.25s ease;
+    }
+
+    .navbar a:hover {
+      color: var(--heading);
+    }
+
+    .navbar a:hover::after,
+    .navbar a:focus-visible::after {
+      width: 100%;
+    }
+
+    .hero-title {
+      font-size: clamp(48px, 8vw, 68px);
+      margin: 42px 0 4px;
+      letter-spacing: -1px;
+      text-shadow: 2px 3px 0 rgba(255, 255, 255, 0.9);
+    }
+
+    .tagline {
+      color: #77686b;
+      font-size: 17px;
+      letter-spacing: 0.2px;
+      margin-bottom: 30px;
+    }
+
+    .section-title {
+      color: #9d6572;
+      font-size: 27px;
+      letter-spacing: 0.8px;
+      margin: 58px 0 12px;
+    }
+
+    .section-title::after {
+      content: "";
+      display: block;
+      width: 42px;
+      height: 3px;
+      margin: 9px auto 0;
+      border-radius: 10px;
+      background: var(--pink-soft);
+    }
+
+    .intro-text {
+      color: #7b6c70;
+      font-size: 15px;
+      margin-bottom: 24px;
+    }
+
+    .home-gallery {
+      max-width: 900px;
+      gap: 12px;
+      padding: 0 18px;
+    }
+
+    .view-only-pic {
+      border: 1px solid #ead9dc;
+      border-radius: 14px;
+      box-shadow: 0 5px 15px rgba(95, 80, 83, 0.07);
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .home-pic-wrapper:hover .view-only-pic {
+      transform: translateY(-3px);
+      box-shadow: 0 9px 20px rgba(95, 80, 83, 0.11);
+    }
+
+    .gallery-grid {
+      max-width: 900px;
+      gap: 18px;
+      padding: 0 18px;
+    }
+
+    .product-card {
+      border: 1px solid #ead9dc;
+      border-radius: 18px;
+      padding: 12px;
+      box-shadow: 0 7px 20px rgba(95, 80, 83, 0.08);
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .product-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 26px rgba(95, 80, 83, 0.12);
+    }
+
+    .clickable-pic {
+      border-radius: 12px;
+    }
+
+    .hidden-info {
+      margin-top: 12px;
+      padding: 14px;
+      background: #fffaf7;
+      border-left: 3px solid var(--rose-pink);
+      border-radius: 10px;
     }
 
     .hidden-info h4 {
-      margin: 0 0 5px 0;
-      color: #ff8b94;
+      color: #9d6572;
     }
 
     .hidden-info p {
-      margin: 0;
-      color: #ffaaa5;
-      font-size: 15px;
+      color: #6f6265;
     }
 
-    /* Phone responsive overrides */
+    .price {
+      margin-top: 11px;
+      padding: 5px 14px;
+      background: #f9d7dc;
+      color: #81505b;
+      font-size: 15px;
+      box-shadow: 0 2px 6px rgba(95, 80, 83, 0.05);
+    }
+
+    .info-wrap {
+      max-width: 900px;
+      padding: 0 18px;
+    }
+
+    .info-box {
+      padding: 32px;
+      border: 1px solid #ead9dc;
+      border-radius: 18px;
+      box-shadow: 0 7px 20px rgba(95, 80, 83, 0.08);
+    }
+
+    .info-box h2 {
+      color: #9d6572;
+      letter-spacing: 0.5px;
+    }
+
+    .info-box p {
+      color: #6f6265;
+    }
+
+    .steps li {
+      background: #fff8e8;
+      border: 1px solid #f3dfab;
+      border-radius: 12px;
+      color: #665c52;
+    }
+
+    .occasions li {
+      background: #f7fbf5;
+      border: 1px solid #cfe2c9;
+      color: #5d7058;
+    }
+
+    .custom-note {
+      background: #fffaf7;
+      border: 1px dashed #e7aeb9;
+      color: #6f6265;
+    }
+
+    .order-btn {
+      background: var(--sage);
+      color: #425a3e;
+      padding: 13px 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 0 #9fc398;
+    }
+
+    .order-btn:hover {
+      background: #acd0a5;
+      box-shadow: 0 2px 0 #94b88d;
+    }
+
+    .back-to-top {
+      width: 44px;
+      height: 44px;
+      border: 1px solid #e2c5ca;
+      box-shadow: 0 5px 14px rgba(95, 80, 83, 0.12);
+    }
+
+    .fb-fixed {
+      filter: drop-shadow(0 5px 10px rgba(95, 80, 83, 0.14));
+    }
+
+    .fb-fixed img {
+      width: 62px;
+      height: 62px;
+      object-fit: contain;
+      border: 0;
+      border-radius: 14px;
+    }
+
+    .footer {
+      color: #8a797d;
+      padding-top: 20px;
+    }
+
     @media (max-width: 600px) {
-      .product-card {
-        flex: 1 1 100%;
+      .navbar {
+        padding: 10px 8px;
       }
-      .home-pic-wrapper {
-        flex: 1 1 calc(50% - 8px); /* Drops to 2 photos per row on mobile for space */
-      }
+
       .navbar a {
-        display: inline-block;
-        margin: 5px 10px;
+        margin: 3px 8px;
+        font-size: 14px;
+      }
+
+      .hero-title {
+        margin-top: 30px;
+      }
+
+      .info-box {
+        padding: 24px 18px;
+      }
+
+      .fb-fixed {
+        bottom: 15px;
+        right: 15px;
+      }
+
+      .back-to-top {
+        bottom: 15px;
+        left: 15px;
       }
     }
+
+
+    /* WARMER, MORE DISTINCTIVE ACCENTS */
+    .navbar {
+      border-bottom: 3px solid var(--pink-soft);
+      box-shadow: 0 3px 14px rgba(181, 111, 126, 0.10);
+    }
+
+    .hero-title {
+      color: #d78395;
+      text-shadow: 2px 3px 0 #ffffff, 0 5px 18px rgba(215, 131, 149, 0.12);
+    }
+
+    .tagline {
+      color: #705f63;
+    }
+
+    .section-title {
+      color: #a85f70;
+      font-weight: 600;
+    }
+
+    .section-title::after {
+      width: 55px;
+      height: 4px;
+      background: linear-gradient(
+        90deg,
+        var(--rose-pink),
+        var(--daffodil),
+        var(--sage)
+      );
+    }
+
+    .home-pic-wrapper {
+      background: #ffffff;
+      border: 2px solid #f1c8d0;
+      border-radius: 16px;
+      padding: 5px;
+      box-shadow: 0 6px 16px rgba(181, 111, 126, 0.10);
+    }
+
+    .view-only-pic {
+      border: 0;
+      border-radius: 11px;
+      box-shadow: none;
+    }
+
+    .product-card {
+      border: 2px solid #efc1cb;
+      background: #ffffff;
+      box-shadow: 0 8px 20px rgba(181, 111, 126, 0.11);
+    }
+
+    .product-card:nth-of-type(2n) {
+      border-color: #c9dfc4;
+    }
+
+    .product-card:nth-of-type(3n) {
+      border-color: #f0dda5;
+    }
+
+    .product-card:hover {
+      box-shadow: 0 13px 28px rgba(181, 111, 126, 0.16);
+    }
+
+    .price {
+      background: #f7d3da;
+      color: #7f4e5a;
+      border: 1px solid #edb8c3;
+      font-weight: 700;
+    }
+
+    .hidden-info {
+      background: #fffaf8;
+      border-left: 4px solid var(--rose-pink);
+      border-top: 1px solid #f2d8dd;
+      border-right: 1px solid #f2d8dd;
+      border-bottom: 1px solid #f2d8dd;
+    }
+
+    .info-box {
+      background: #ffffff;
+      border: 2px solid #ead0d5;
+      box-shadow: 0 8px 22px rgba(181, 111, 126, 0.09);
+    }
+
+    .info-box h2 {
+      color: #a85f70;
+    }
+
+    .steps li {
+      background: #fff8e5;
+      border: 2px solid #f0d58e;
+      box-shadow: 0 3px 8px rgba(181, 140, 70, 0.07);
+    }
+
+    .occasions li {
+      background: #f5faf3;
+      border: 2px solid #c5ddbf;
+      box-shadow: 0 3px 8px rgba(90, 120, 80, 0.07);
+    }
+
+    .custom-note {
+      background: #fff4f6;
+      border: 1px dashed #e3a8b5;
+    }
+
+    .order-btn {
+      border: 2px solid #91b88a;
+      box-shadow: 0 4px 0 #82a87b, 0 7px 14px rgba(80, 110, 75, 0.10);
+      font-weight: 700;
+    }
+
+    .order-btn:hover {
+      box-shadow: 0 2px 0 #82a87b, 0 6px 14px rgba(80, 110, 75, 0.12);
+    }
+
+    .footer {
+      border-top: 1px solid #ead5d9;
+      margin-top: 45px;
+    }
+	
+	body {
+    position: relative;
+    background: #fff9f0;
+    overflow-x: hidden;
+    }
+
+    body::before {
+    content: "🌿";
+    position: fixed;
+    top: 80px;
+    left: 10px;
+    font-size: 100px;
+    opacity: 0.12;
+    z-index: -1;
+    transform: rotate(-15deg);
+    }
+
+    body::after {
+    content: "🌸";
+    position: fixed;
+    right: 15px;
+    bottom: 80px;
+    font-size: 90px;
+    opacity: 0.12;
+    z-index: -1;
+    }
+
   </style>
 </head>
-<body style="background-color: #E6E6FA; background-size: contain; margin: 0; padding: 0 0 10px 0;">
+<body>
 
-  <!-- TOP NAVIGATION BAR -->
+  <!-- NAVIGATION -->
   <nav class="navbar">
     <a href="#home">Home</a>
     <a href="#bouquets">Bouquets</a>
     <a href="#keychains">Keychains</a>
     <a href="#bundles">Bundles</a>
-    <a href="#about">About Handmei'd</a>
+    <a href="#order">How to Order</a>
+    <a href="#about">About</a>
   </nav>
 
-  <!-- HOME SECTION -->
+  <!-- HOME -->
   <div id="home" style="scroll-margin-top: 80px;">
-    <!-- TITLE -->
-   <h1 style="font-family: 'Fredoka', sans-serif; font-weight: 700; font-size: 64px; color: #ff8b94; text-align: center; margin: 20px 0 30px 0; text-shadow: 3px 3px 0 white;">
-    H❤ndMei'd
-  </h1>
-   <h2 style="color: #ff8b94; margin-top: 0; font-family: 'Fredoka', sans-serif; font-size: 28px; text-align: center;">HOME</h2>
+    <h1 class="hero-title">H❤ndMei'd</h1>
+    <p class="tagline">Handmade with love &amp; passion</p>
 
-    <!-- HOME PAGE VIEW-ONLY GALLERY (20 Pictures total) -->
     <div class="home-gallery">
-      <div class="home-pic-wrapper"><img class="view-only-pic" src="home1.png" alt="Showcase Image 1"></div>
-      <div class="home-pic-wrapper"><img class="view-only-pic" src="home2.png" alt="Showcase Image 2"></div>
-      <div class="home-pic-wrapper"><img class="view-only-pic" src="home3.png" alt="Showcase Image 3"></div>
-      <div class="home-pic-wrapper"><img class="view-only-pic" src="home4.png" alt="Showcase Image 4"></div>
-      <div class="home-pic-wrapper"><img class="view-only-pic" src="home5.png" alt="Showcase Image 5"></div>
-      <div class="home-pic-wrapper"><img class="view-only-pic" src="home6.png" alt="Showcase Image 6"></div>
-      <div class="home-pic-wrapper"><img class="view-only-pic" src="home7.png" alt="Showcase Image 7"></div>
-      <div class="home-pic-wrapper"><img class="view-only-pic" src="home8.png" alt="Showcase Image 8"></div>
-      <div class="home-pic-wrapper"><img class="view-only-pic" src="home9.png" alt="Showcase Image 9"></div>
-      <div class="home-pic-wrapper"><img class="view-only-pic" src="home10.png" alt="Showcase Image 10"></div>
-      <div class="home-pic-wrapper"><img class="view-only-pic" src="home11.png" alt="Showcase Image 11"></div>
-      <div class="home-pic-wrapper"><img class="view-only-pic" src="home12.png" alt="Showcase Image 12"></div>
-      <div class="home-pic-wrapper"><img class="view-only-pic" src="home13.png" alt="Showcase Image 13"></div>
-      <div class="home-pic-wrapper"><img class="view-only-pic" src="home14.png" alt="Showcase Image 14"></div>
-      <div class="home-pic-wrapper"><img class="view-only-pic" src="home15.png" alt="Showcase Image 15"></div>
-      <div class="home-pic-wrapper"><img class="view-only-pic" src="home16.png" alt="Showcase Image 16"></div>
-      <div class="home-pic-wrapper"><img class="view-only-pic" src="home17.png" alt="Showcase Image 17"></div>
-      <div class="home-pic-wrapper"><img class="view-only-pic" src="home18.png" alt="Showcase Image 18"></div>
+      <div class="home-pic-wrapper"><img class="view-only-pic" src="home1.png" alt="Handmei'd showcase photo 1"></div>
+      <div class="home-pic-wrapper"><img class="view-only-pic" src="home2.png" alt="Handmei'd showcase photo 2"></div>
+      <div class="home-pic-wrapper"><img class="view-only-pic" src="home3.png" alt="Handmei'd showcase photo 3"></div>
+      <div class="home-pic-wrapper"><img class="view-only-pic" src="home4.png" alt="Handmei'd showcase photo 4"></div>
+      <div class="home-pic-wrapper"><img class="view-only-pic" src="home5.png" alt="Handmei'd showcase photo 5"></div>
+      <div class="home-pic-wrapper"><img class="view-only-pic" src="home6.png" alt="Handmei'd showcase photo 6"></div>
+      <div class="home-pic-wrapper"><img class="view-only-pic" src="home7.png" alt="Handmei'd showcase photo 7"></div>
+      <div class="home-pic-wrapper"><img class="view-only-pic" src="home8.png" alt="Handmei'd showcase photo 8"></div>
+      <div class="home-pic-wrapper"><img class="view-only-pic" src="home9.png" alt="Handmei'd showcase photo 9"></div>
+      <div class="home-pic-wrapper"><img class="view-only-pic" src="home10.png" alt="Handmei'd showcase photo 10"></div>
+      <div class="home-pic-wrapper"><img class="view-only-pic" src="home11.png" alt="Handmei'd showcase photo 11"></div>
+      <div class="home-pic-wrapper"><img class="view-only-pic" src="home12.png" alt="Handmei'd showcase photo 12"></div>
+      <div class="home-pic-wrapper"><img class="view-only-pic" src="home13.png" alt="Handmei'd showcase photo 13"></div>
+      <div class="home-pic-wrapper"><img class="view-only-pic" src="home14.png" alt="Handmei'd showcase photo 14"></div>
+      <div class="home-pic-wrapper"><img class="view-only-pic" src="home15.png" alt="Handmei'd showcase photo 15"></div>
+      <div class="home-pic-wrapper"><img class="view-only-pic" src="home16.png" alt="Handmei'd showcase photo 16"></div>
+      <div class="home-pic-wrapper"><img class="view-only-pic" src="home17.png" alt="Handmei'd showcase photo 17"></div>
+      <div class="home-pic-wrapper"><img class="view-only-pic" src="home18.png" alt="Handmei'd showcase photo 18"></div>
     </div>
   </div>
 
-  <!-- CREATIONS HEADER -->
-  <h2 style="text-align: center; color: #ff8b94; margin: 40px 0 10px 0; font-family: 'Fredoka', sans-serif; font-size: 28px;">
-      Want to see some of my creations?
-  </h2>
-  <p style="font-family: 'Quicksand', sans-serif; color: #ffaaa5; font-size: 16px; text-align: center; margin: 0 0 20px 0;">
-      Click any product below to view details!
-  </p>
+  <!-- CREATIONS -->
+  <h2 class="section-title">Want to see some of my creations?</h2>
+  <p class="intro-text">Tap any product to see its details!</p>
 
-  <!-- PRODUCT GALLERY GRID -->
   <div class="gallery-grid">
 
-    <!-- BOUQUETS TITLE & SECTION -->
-    <h2 id="bouquets" class="section-title" style="scroll-margin-top: 80px;">BOUQUETS</h2>
-    
-     <!-- Product 1 -->
+    <h2 id="bouquets" class="section-title">BOUQUETS</h2>
+
     <div class="product-card">
-      <img class="clickable-pic" src="1.png" alt="Product 1">
+      <img class="clickable-pic" src="1.png" alt="Large bouquet of handmade fuzzy-wire flowers" tabindex="0" role="button" aria-expanded="false">
+      <p class="price">Starts at ₱400</p>
       <div class="hidden-info">
         <h4>Large Flower Bouquet</h4>
-        <p>Made by love and fuzzy wires!</p>
+        <p>A full, fluffy bouquet of handmade fuzzy-wire flowers. It never wilts, so it's a gift that lasts forever. Perfect for birthdays, graduations, and anniversaries.</p>
+        <p class="order-hint">Order via our Facebook page 💌</p>
       </div>
     </div>
 
-    <!-- Product 2 -->
     <div class="product-card">
-      <img class="clickable-pic" src="2.png" alt="Product 2">
+      <img class="clickable-pic" src="2.png" alt="Bouquet of handmade fuzzy-wire flowers" tabindex="0" role="button" aria-expanded="false">
+      <p class="price">Starts at ₱120</p>
       <div class="hidden-info">
         <h4>Flower Bouquet</h4>
-        <p>Made by love and fuzzy wires!</p>
+        <p>Our classic bouquet. A cozy bunch of soft, colorful blooms, handcrafted stem by stem. Great for desks, shelves, and sweet surprises.</p>
+        <p class="order-hint">Order via our Facebook page 💌</p>
       </div>
     </div>
 
-    <!-- Product 3 -->
     <div class="product-card">
-      <img class="clickable-pic" src="3.png" alt="Product 3">
+      <img class="clickable-pic" src="3.png" alt="Mini bouquet of handmade fuzzy-wire flowers" tabindex="0" role="button" aria-expanded="false">
+      <p class="price">Starts at ₱50</p>
       <div class="hidden-info">
         <h4>Mini Flower Bouquet</h4>
-        <p>Made by love and fuzzy wires!</p>
+        <p>Small but full of charm! A pocket-sized bouquet that's perfect as a tiny gift, a thank-you, or a little pick-me-up.</p>
+        <p class="order-hint">Order via our Facebook page 💌</p>
       </div>
     </div>
 
-    <!-- KEYCHAINS TITLE & SECTION -->
-    <h2 id="keychains" class="section-title" style="scroll-margin-top: 80px;">KEYCHAINS</h2>
+    <h2 id="keychains" class="section-title">KEYCHAINS</h2>
 
-    <!-- Product 4 -->
     <div class="product-card">
-      <img class="clickable-pic" src="4.png" alt="Product 4">
+      <img class="clickable-pic" src="4.png" alt="Handmade fuzzy wire keychains" tabindex="0" role="button" aria-expanded="false">
+      <p class="price">Starts at ₱25</p>
       <div class="hidden-info">
         <h4>Fuzzy Wire Keychains</h4>
-        <p>Made by love and fuzzy wires!</p>
+        <p>Soft and adorable. Handmade from fuzzy wires and shaped with care to brighten up your keys or bag.</p>
+        <p class="order-hint">Order via our Facebook page 💌</p>
       </div>
     </div>
 
-    <!-- Product 5 -->
     <div class="product-card">
-      <img class="clickable-pic" src="5.png" alt="Product 5">
+      <img class="clickable-pic" src="5.png" alt="Handmade recycled denim keychains" tabindex="0" role="button" aria-expanded="false">
+      <p class="price">Starts at ₱40</p>
       <div class="hidden-info">
         <h4>Denim Keychains</h4>
-        <p>Made by love and recycled denim!</p>
-      </div>
-    </div>
-	
-	<h2 id="bundles" class="section-title" style="scroll-margin-top: 80px;">BUNDLES</h2>
-    
-     <!-- Product 1 -->
-    <div class="product-card">
-      <img class="clickable-pic" src="b1.png" alt="Product 1">
-      <div class="hidden-info">
-        <h4>Large Flower BouquetXDenim Keychain</h4>
-        <p>CuteXCute=Hapiness</p>
+        <p>Handmade from recycled denim, giving old jeans a cute new life. Sturdy, stylish, and one of a kind.</p>
+        <p class="order-hint">Order via our Facebook page 💌</p>
       </div>
     </div>
 
-    <!-- Product 2 -->
+    <h2 id="bundles" class="section-title">BUNDLES</h2>
+
     <div class="product-card">
-      <img class="clickable-pic" src="b2.png" alt="Product 2">
+      <img class="clickable-pic" src="b1.png" alt="Large bouquet and denim keychain bundle" tabindex="0" role="button" aria-expanded="false">
+      <p class="price">₱430</p>
       <div class="hidden-info">
-        <h4>Large Flower BouquetXFuzzy Wire Keychain</h4>
-        <p>CuteXCute=Hapiness</p>
+        <h4>Large Bouquet + Denim Keychain</h4>
+        <p>Our biggest bouquet paired with a denim keychain. A complete gift set that's ready to give.</p>
+        <p class="order-hint">Order via our Facebook page 💌</p>
       </div>
     </div>
 
-    <!-- Product 3 -->
     <div class="product-card">
-      <img class="clickable-pic" src="b3.png" alt="Product 3">
+      <img class="clickable-pic" src="b2.png" alt="Large bouquet and fuzzy wire keychain bundle" tabindex="0" role="button" aria-expanded="false">
+      <p class="price">₱415</p>
       <div class="hidden-info">
-        <h4>Flower BouquetXDenim Keychain</h4>
-        <p>CuteXCute=Hapiness</p>
-      </div>
-    </div>
-	
-	<!-- Product 4 -->
-    <div class="product-card">
-      <img class="clickable-pic" src="b4.png" alt="Product 4">
-      <div class="hidden-info">
-        <h4>Flower BouquetXFuzzy Wire Keychain</h4>
-        <p>CuteXCute=Hapiness</p>
+        <h4>Large Bouquet + Fuzzy Wire Keychain</h4>
+        <p>A full bouquet with a matching fuzzy keychain. Twice the cuteness in one set.</p>
+        <p class="order-hint">Order via our Facebook page 💌</p>
       </div>
     </div>
 
-    <!-- Product 5 -->
     <div class="product-card">
-      <img class="clickable-pic" src="b5.png" alt="Product 5">
+      <img class="clickable-pic" src="b3.png" alt="Bouquet and denim keychain bundle" tabindex="0" role="button" aria-expanded="false">
+      <p class="price">₱152</p>
       <div class="hidden-info">
-        <h4>Mini Flower BouquetXDenim Keychain</h4>
-        <p>CuteXCute=Hapiness</p>
+        <h4>Bouquet + Denim Keychain</h4>
+        <p>Our classic bouquet with a recycled-denim keychain. A sweet and affordable gift duo.</p>
+        <p class="order-hint">Order via our Facebook page 💌</p>
       </div>
     </div>
-	
-	<!-- Product 6 -->
-    <div class="product-card">
-      <img class="clickable-pic" src="b6.png" alt="Product 6">
-      <div class="hidden-info">
-        <h4>Mini Flower BouquetXFuzzy Wire Keychain</h4>
-        <p>CuteXCute=Hapiness</p>
-      </div>
-    </div>
-	
-	<!-- STICKY FACEBOOK BUTTON -->
-  <div style="position: fixed; bottom: 20px; right: 20px; z-index: 1000;">
-    <a href="https://www.facebook.com/profile.php?id=61582801926748" target="_blank">
-        <img src="fb.png" width="70" alt="Visit my Facebook Page" style="border-radius: 15px; border: 2px solid #ff8b94; display: block;">
-    </a>
-</div>
 
-  <!-- SINGLE INTERACTIVE GALLERY SCRIPT -->
+    <div class="product-card">
+      <img class="clickable-pic" src="b4.png" alt="Bouquet and fuzzy wire keychain bundle" tabindex="0" role="button" aria-expanded="false">
+      <p class="price">₱137</p>
+      <div class="hidden-info">
+        <h4>Bouquet + Fuzzy Wire Keychain</h4>
+        <p>A classic bouquet plus a soft fuzzy keychain. Small joys, beautifully paired.</p>
+        <p class="order-hint">Order via our Facebook page 💌</p>
+      </div>
+    </div>
+
+    <div class="product-card">
+      <img class="clickable-pic" src="b5.png" alt="Mini bouquet and denim keychain bundle" tabindex="0" role="button" aria-expanded="false">
+      <p class="price">₱85</p>
+      <div class="hidden-info">
+        <h4>Mini Bouquet + Denim Keychain</h4>
+        <p>Our tiniest bouquet with a denim keychain. A perfect little gift set.</p>
+        <p class="order-hint">Order via our Facebook page 💌</p>
+      </div>
+    </div>
+
+    <div class="product-card">
+      <img class="clickable-pic" src="b6.png" alt="Mini bouquet and fuzzy wire keychain bundle" tabindex="0" role="button" aria-expanded="false">
+      <p class="price">₱70</p>
+      <div class="hidden-info">
+        <h4>Mini Bouquet + Fuzzy Wire Keychain</h4>
+        <p>A mini bouquet and a fuzzy keychain, both made to be cherished.</p>
+        <p class="order-hint">Order via our Facebook page 💌</p>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- GIFT OCCASIONS -->
+  <div class="info-wrap">
+    <div class="info-box">
+      <h2>PERFECT FOR 🎁</h2>
+      <p>Handmade gifts that never wilt, for every special moment:</p>
+      <ul class="occasions">
+        <li>Birthdays</li>
+        <li>Graduations</li>
+        <li>Anniversaries</li>
+        <li>Valentine's Day</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- HOW TO ORDER -->
+  <div class="info-wrap">
+    <div id="order" class="info-box">
+      <h2>HOW TO ORDER 🛍️</h2>
+      <p>You can order at our Facebook page! Just follow these easy steps:</p>
+      <ul class="steps">
+        <li>1. Pick your favorite item</li>
+        <li>2. Send us a message on Facebook</li>
+        <li>3. We'll confirm the details with you</li>
+      </ul>
+      <p class="custom-note">💜 Want a custom color or flower mix? Message us and we'll make it just for you!</p>
+      <a class="order-btn" href="https://www.facebook.com/profile.php?id=61582801926748" target="_blank" rel="noopener">Order on Facebook 💌</a>
+    </div>
+  </div>
+
+  <!-- ABOUT -->
+  <div class="info-wrap">
+    <div id="about" class="info-box">
+      <h2>ABOUT HANDMEI'D</h2>
+      <p>H🩷ndMei'd is a small business born from the passion and eagerness of a young artist to share her art with the world.</p>
+      <p>The name comes from the word "handmade," because every product is made by hand and with heart. "Mei" comes from the artist's name, Meilyn.</p>
+      <p>Our goal is to give joy and spread love to everyone our art reaches. 🩷</p>
+    </div>
+  </div>
+
+  <div class="footer">© 2026 Handmei'd · Handmade with love</div>
+
+  <!-- BACK TO TOP BUTTON -->
+  <button class="back-to-top" id="backToTop" aria-label="Back to top">↑</button>
+
+  <!-- STICKY FACEBOOK BUTTON -->
+  <a class="fb-fixed" href="https://www.facebook.com/profile.php?id=61582801926748" target="_blank" rel="noopener">
+    <img src="fb.png" width="70" alt="Visit our Facebook page">
+  </a>
+
+  body {
+    position: relative;
+    background: #fff9f0;
+    overflow-x: hidden;
+}
+
+body::before {
+    content: "🌿";
+    position: fixed;
+    top: 80px;
+    left: 10px;
+    font-size: 100px;
+    opacity: 0.12;
+    z-index: -1;
+    transform: rotate(-15deg);
+}
+
+body::after {
+    content: "🌸";
+    position: fixed;
+    right: 15px;
+    bottom: 80px;
+    font-size: 90px;
+    opacity: 0.12;
+    z-index: -1;
+}
+
   <script>
-    const cards = document.querySelectorAll('.product-card');
+    // Tap/click a product photo to show or hide its details
+    document.querySelectorAll('.product-card').forEach(function (card) {
+      var picture = card.querySelector('.clickable-pic');
+      var infoBox = card.querySelector('.hidden-info');
+      if (!picture || !infoBox) return;
 
-    cards.forEach(card => {
-      const picture = card.querySelector('.clickable-pic');
-      const infoBox = card.querySelector('.hidden-info');
-
-      if (picture && infoBox) {
-        picture.addEventListener('click', function() {
-          // Accurately checks what display state the browser is seeing right now
-          if (window.getComputedStyle(infoBox).display === 'none') {
-            infoBox.style.display = 'block';
-          } else {
-            infoBox.style.display = 'none';
-          }
-        });
+      function toggle() {
+        var open = infoBox.style.display === 'block';
+        infoBox.style.display = open ? 'none' : 'block';
+        picture.setAttribute('aria-expanded', String(!open));
       }
+
+      picture.addEventListener('click', toggle);
+      picture.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); }
+      });
+    });
+
+    // Back-to-top button: appears after scrolling down a bit
+    var backToTop = document.getElementById('backToTop');
+    window.addEventListener('scroll', function () {
+      backToTop.classList.toggle('show', window.scrollY > 400);
+    });
+    backToTop.addEventListener('click', function () {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     });
   </script>
-  
-  <!-- HERO ROW INFO BOXES -->
-<div style="display: flex; flex-wrap: wrap; align-items: stretch; gap: 10px; max-width: 800px; margin: 0 auto 30px auto; padding: 0 10px;">
-
-    <!-- LEFT BOX (About Section Anchor) -->
-    <div id="about" style="scroll-margin-top: 80px; flex: 1 1 100%; background-color: white; padding: 30px; border: 3px solid #ff8b94; border-radius: 15px; font-family: Arial, sans-serif; box-sizing: border-box; text-align: center;">
-        <h2 style="color: #ff8b94; margin-top: 0; font-family: 'Fredoka', sans-serif; font-size: 28px;">ABOUT HANDMEI'D</h2>
-        <p style="font-family: 'Quicksand', sans-serif; color: #ffaaa5; font-size: 18px; margin: 0; line-height: 1.6;">
-            Hi! I'm Meirah, a first-year college student and an artist. Welcome to my hub!
-            <br><br>H❤ndMei'd
-        </p>
-    </div>
-
-</div>
 
 </body>
 </html>
