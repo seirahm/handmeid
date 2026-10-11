@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <title>Handmei'd | Handmade Bouquets &amp; Keychains</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Handmei'd: handmade fuzzy-wire bouquets, recycled denim keychains, and gift bundles. Order on our Facebook page.">
+  <meta name="description" content="Handmei'd: handmade fuzzy-wire bouquets, recycled denim keychains, and gift bundles. Add your favorites to the cart and check out online.">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🩷</text></svg>">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -735,6 +735,322 @@
     z-index: -1;
     }
 
+
+    /* ============ CART & CHECKOUT ============ */
+    .cart-drawer [hidden] { display: none !important; }
+
+    /* Cart button in the navbar */
+    .nav-cart {
+      display: inline-block;
+      font-family: 'Fredoka', sans-serif;
+      font-weight: 500;
+      font-size: 15px;
+      color: #65575a;
+      background: #fff4f6;
+      border: 2px solid var(--pink-soft);
+      border-radius: 30px;
+      padding: 5px 14px;
+      margin: 0 0 0 10px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .nav-cart:hover { background: #fde6ea; }
+    .cart-count {
+      display: inline-block;
+      min-width: 20px;
+      padding: 0 6px;
+      margin-left: 4px;
+      border-radius: 20px;
+      background: #a85f70;
+      color: #fff;
+      font-size: 13px;
+      line-height: 20px;
+      text-align: center;
+    }
+
+    /* Product card: price + add button on one row */
+    .card-foot {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 12px;
+    }
+    .card-foot .price { margin: 0; }
+
+    .add-btn,
+    .place-btn,
+    button.order-btn {
+      font-family: 'Fredoka', sans-serif;
+      font-weight: 600;
+      cursor: pointer;
+      background: var(--sage);
+      color: #425a3e;
+      border: 2px solid #91b88a;
+      box-shadow: 0 3px 0 #82a87b;
+      transition: transform 0.15s, box-shadow 0.15s, background 0.15s;
+    }
+    .add-btn { font-size: 15px; padding: 7px 16px; border-radius: 12px; }
+    .add-btn:hover,
+    .place-btn:hover:not(:disabled) {
+      background: #acd0a5;
+      transform: translateY(1px);
+      box-shadow: 0 2px 0 #82a87b;
+    }
+    .place-btn { width: 100%; font-size: 18px; padding: 12px 20px; border-radius: 12px; }
+    .place-btn:disabled { opacity: 0.6; cursor: wait; }
+    .add-btn:focus-visible,
+    .place-btn:focus-visible,
+    .nav-cart:focus-visible,
+    .cart-close:focus-visible,
+    .qty button:focus-visible,
+    .cart-remove:focus-visible,
+    .save-receipt:focus-visible,
+    button.order-btn:focus-visible {
+      outline: 3px solid var(--pink);
+      outline-offset: 3px;
+    }
+
+    /* Drawer */
+    .cart-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(95, 80, 83, 0.4);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.25s, visibility 0.25s;
+      z-index: 2500;
+    }
+    .cart-overlay.show { opacity: 1; visibility: visible; }
+
+    .cart-drawer {
+      position: fixed;
+      top: 0;
+      right: 0;
+      height: 100%;
+      width: min(420px, 100%);
+      display: flex;
+      flex-direction: column;
+      background: #fff;
+      border-left: 2px solid #ead0d5;
+      box-shadow: -8px 0 30px rgba(95, 80, 83, 0.15);
+      transform: translateX(100%);
+      visibility: hidden;
+      transition: transform 0.3s ease, visibility 0.3s;
+      z-index: 3000;
+    }
+    .cart-drawer.open { transform: none; visibility: visible; }
+
+    .cart-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 20px;
+      border-bottom: 2px solid var(--pink-soft);
+    }
+    .cart-head h2 { margin: 0; font-family: 'Fredoka', sans-serif; font-size: 22px; color: #a85f70; }
+    .cart-close {
+      width: 38px; height: 38px;
+      border-radius: 50%;
+      border: 1px solid #e2c5ca;
+      background: #fff;
+      color: #65575a;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    .cart-close:hover { background: var(--blush); }
+
+    .cart-form { flex: 1; display: flex; flex-direction: column; min-height: 0; }
+    .cart-scroll { flex: 1; overflow-y: auto; padding: 8px 20px 16px; }
+    .cart-empty { text-align: center; padding: 40px 10px; font-size: 16px; line-height: 1.6; }
+
+    .cart-item {
+      display: grid;
+      grid-template-columns: 64px 1fr auto;
+      gap: 12px;
+      align-items: start;
+      padding: 12px 0;
+      border-bottom: 1px solid #f2d8dd;
+    }
+    .cart-item img {
+      width: 64px; height: 64px;
+      object-fit: cover;
+      border-radius: 10px;
+      border: 1px solid #efc1cb;
+    }
+    .cart-item-name { font-weight: 700; font-size: 15px; line-height: 1.3; }
+    .cart-item-price { font-size: 13px; color: #7b6c70; margin-top: 2px; }
+    .qty { display: inline-flex; align-items: center; gap: 10px; margin-top: 8px; }
+    .qty button {
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      border: 1px solid #e2c5ca;
+      background: #fff;
+      color: #65575a;
+      font-size: 16px;
+      line-height: 1;
+      cursor: pointer;
+    }
+    .qty button:disabled { opacity: 0.4; cursor: default; }
+    .qty-num { min-width: 18px; text-align: center; font-weight: 700; }
+    .cart-item-side { text-align: right; }
+    .cart-item-line { font-family: 'Fredoka', sans-serif; font-weight: 600; color: #7f4e5a; }
+    .cart-remove {
+      margin-top: 8px;
+      padding: 0;
+      border: 0;
+      background: none;
+      color: #a85f70;
+      font: inherit;
+      font-size: 13px;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+
+    .cart-sub { margin: 22px 0 0; font-family: 'Fredoka', sans-serif; font-size: 17px; color: #a85f70; }
+    .cart-form label { display: block; margin: 12px 0 4px; font-size: 14px; font-weight: 700; }
+    .cart-form input[type="text"],
+    .cart-form input[type="email"],
+    .cart-form textarea {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 10px 12px;
+      border: 2px solid #ead0d5;
+      border-radius: 10px;
+      font: inherit;
+      color: #5f5053;
+      background: #fff;
+    }
+    .cart-form textarea { resize: vertical; }
+    .cart-form input:focus,
+    .cart-form textarea:focus { outline: 3px solid var(--pink-soft); border-color: var(--pink); }
+    .cart-form input[aria-invalid="true"] { border-color: #c0392b; }
+    .field-error { min-height: 1.2em; margin-top: 4px; font-size: 13px; color: #b3283f; }
+    .cart-status { margin-top: 10px; font-size: 14px; font-weight: 700; color: #b3283f; }
+    .hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+
+    .cart-foot { padding: 14px 20px 18px; border-top: 2px solid var(--pink-soft); background: #fffaf8; }
+    .cart-total {
+      display: flex;
+      justify-content: space-between;
+      font-family: 'Fredoka', sans-serif;
+      font-weight: 600;
+      font-size: 19px;
+      color: #7f4e5a;
+    }
+    .cart-note { margin: 4px 0 12px; font-size: 13px; line-height: 1.5; color: #7b6c70; }
+
+    .cart-done { flex: 1; overflow-y: auto; padding: 40px 24px; text-align: center; }
+    .cart-done h3 { margin: 8px 0; font-family: 'Fredoka', sans-serif; font-size: 24px; color: #a85f70; }
+    .done-emoji { font-size: 44px; }
+    .done-label { margin: 18px 0 4px; font-size: 14px; }
+    .done-number {
+      display: inline-block;
+      margin: 0 0 18px;
+      padding: 8px 18px;
+      background: var(--blush);
+      border: 2px dashed #e3a8b5;
+      border-radius: 12px;
+      font-family: 'Fredoka', sans-serif;
+      font-weight: 600;
+      font-size: 24px;
+      letter-spacing: 1px;
+      color: #7f4e5a;
+    }
+    .cart-done p { line-height: 1.6; }
+
+    /* Toast */
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 24px;
+      z-index: 3500;
+      max-width: calc(100% - 40px);
+      padding: 10px 18px;
+      border-radius: 12px;
+      background: #5f5053;
+      color: #fff;
+      font-size: 14px;
+      font-weight: 600;
+      transform: translate(-50%, 20px);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s, transform 0.2s;
+    }
+    .toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+
+    /* Color options sheet */
+    .opt-overlay {
+      position: fixed; inset: 0;
+      background: rgba(95, 80, 83, 0.45);
+      opacity: 0; visibility: hidden;
+      transition: opacity 0.25s, visibility 0.25s;
+      z-index: 3100;
+    }
+    .opt-overlay.show { opacity: 1; visibility: visible; }
+    .opt-sheet {
+      position: fixed; left: 50%; top: 50%;
+      width: min(440px, calc(100% - 24px));
+      max-height: calc(100% - 24px);
+      overflow-y: auto;
+      box-sizing: border-box;
+      padding: 18px 20px 20px;
+      background: #fff;
+      border: 2px solid #ead0d5;
+      border-radius: 18px;
+      box-shadow: 0 12px 40px rgba(95, 80, 83, 0.25);
+      transform: translate(-50%, -46%);
+      opacity: 0; visibility: hidden;
+      transition: opacity 0.2s, transform 0.2s, visibility 0.2s;
+      z-index: 3200;
+    }
+    .opt-sheet.open { opacity: 1; visibility: visible; transform: translate(-50%, -50%); }
+    .opt-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 8px; }
+    .opt-head h2 { margin: 0; font-family: 'Fredoka', sans-serif; font-size: 20px; color: #a85f70; line-height: 1.25; }
+    .opt-group { border: 0; margin: 14px 0 0; padding: 0; min-width: 0; }
+    .opt-group legend { padding: 0; font-weight: 700; font-size: 15px; }
+    .opt-group legend span { font-weight: 500; font-size: 13px; color: #7b6c70; }
+    .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+    .chip { position: relative; display: inline-block; margin: 0; }
+    .chip input { position: absolute; opacity: 0; width: 100%; height: 100%; margin: 0; cursor: pointer; }
+    .chip-face {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 7px 14px 7px 8px;
+      border: 2px solid #ead0d5; border-radius: 30px;
+      background: #fff; font-size: 15px; font-weight: 600;
+      transition: background 0.15s, border-color 0.15s;
+    }
+    .swatch { width: 20px; height: 20px; border-radius: 50%; border: 1px solid rgba(95, 80, 83, 0.35); flex: none; }
+    .chip input:checked + .chip-face { border-color: #a85f70; background: #fde6ea; }
+    .chip input:checked + .chip-face::after { content: '\2713'; font-weight: 700; color: #a85f70; }
+    .chip input:focus-visible + .chip-face { outline: 3px solid var(--pink); outline-offset: 2px; }
+    #optForm .field-error { margin-top: 10px; }
+    .opt-sheet [hidden] { display: none !important; }
+    .opt-label { display: block; font-weight: 700; font-size: 15px; margin-bottom: 6px; }
+    .opt-label span { font-weight: 500; font-size: 13px; color: #7b6c70; }
+    #optMessage {
+      width: 100%; box-sizing: border-box; padding: 10px 12px;
+      border: 2px solid #ead0d5; border-radius: 10px;
+      font: inherit; color: #5f5053; background: #fff; resize: vertical;
+    }
+    #optMessage:focus { outline: 3px solid var(--pink-soft); border-color: var(--pink); }
+    .cart-form .chip { display: inline-block; margin: 0; }
+    .pay-group { margin-top: 16px; }
+    .cart-item-opts { margin-top: 3px; font-size: 13px; line-height: 1.4; color: #7b6c70; }
+
+    /* Receipt photo on the confirmation screen */
+    .receipt-wrap { margin: 18px 0 22px; }
+    .receipt-wrap img { display: block; width: 100%; max-width: 330px; height: auto; margin: 0 auto 14px; border-radius: 10px; box-shadow: 0 4px 16px rgba(95, 80, 83, 0.18); }
+    .save-receipt { display: inline-block; width: auto; box-sizing: border-box; text-decoration: none; font-size: 16px; padding: 10px 22px; }
+    .receipt-tip { margin: 10px 0 0; font-size: 13px; color: #7b6c70; }
+    .receipt-wrap[hidden] { display: none !important; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .cart-drawer, .cart-overlay, .toast, .opt-sheet, .opt-overlay { transition: none; }
+    }
+
   </style>
 </head>
 <body>
@@ -747,6 +1063,7 @@
     <a href="#bundles">Bundles</a>
     <a href="#order">How to Order</a>
     <a href="#about">About</a>
+    <button type="button" class="nav-cart" id="openCart" aria-label="Open cart, 0 items">🛒 Cart <span class="cart-count" id="cartCount">0</span></button>
   </nav>
 
   <!-- HOME -->
@@ -784,117 +1101,139 @@
 
     <h2 id="bouquets" class="section-title">BOUQUETS</h2>
 
-    <div class="product-card">
+    <div class="product-card" data-id="1" data-options="bouquet" data-name="Large Flower Bouquet" data-price="400">
       <img class="clickable-pic" src="1.png" alt="Large bouquet of handmade fuzzy-wire flowers" tabindex="0" role="button" aria-expanded="false">
-      <p class="price">Starts at ₱400</p>
+      <div class="card-foot">
+        <p class="price">₱400</p>
+        <button type="button" class="add-btn" aria-label="Add Large Flower Bouquet to cart">Add to cart</button>
+      </div>
       <div class="hidden-info">
         <h4>Large Flower Bouquet</h4>
         <p>A full, fluffy bouquet of handmade fuzzy-wire flowers. It never wilts, so it's a gift that lasts forever. Perfect for birthdays, graduations, and anniversaries.</p>
-        <p class="order-hint">Order via our Facebook page 💌</p>
       </div>
     </div>
 
-    <div class="product-card">
+    <div class="product-card" data-id="2" data-options="bouquet" data-name="Flower Bouquet" data-price="120">
       <img class="clickable-pic" src="2.png" alt="Bouquet of handmade fuzzy-wire flowers" tabindex="0" role="button" aria-expanded="false">
-      <p class="price">Starts at ₱120</p>
+      <div class="card-foot">
+        <p class="price">₱120</p>
+        <button type="button" class="add-btn" aria-label="Add Flower Bouquet to cart">Add to cart</button>
+      </div>
       <div class="hidden-info">
         <h4>Flower Bouquet</h4>
         <p>Our classic bouquet. A cozy bunch of soft, colorful blooms, handcrafted stem by stem. Great for desks, shelves, and sweet surprises.</p>
-        <p class="order-hint">Order via our Facebook page 💌</p>
       </div>
     </div>
 
-    <div class="product-card">
+    <div class="product-card" data-id="3" data-options="bouquet" data-name="Mini Flower Bouquet" data-price="50">
       <img class="clickable-pic" src="3.png" alt="Mini bouquet of handmade fuzzy-wire flowers" tabindex="0" role="button" aria-expanded="false">
-      <p class="price">Starts at ₱50</p>
+      <div class="card-foot">
+        <p class="price">₱50</p>
+        <button type="button" class="add-btn" aria-label="Add Mini Flower Bouquet to cart">Add to cart</button>
+      </div>
       <div class="hidden-info">
         <h4>Mini Flower Bouquet</h4>
         <p>Small but full of charm! A pocket-sized bouquet that's perfect as a tiny gift, a thank-you, or a little pick-me-up.</p>
-        <p class="order-hint">Order via our Facebook page 💌</p>
       </div>
     </div>
 
     <h2 id="keychains" class="section-title">KEYCHAINS</h2>
 
-    <div class="product-card">
+    <div class="product-card" data-id="4" data-options="fuzzy" data-name="Fuzzy Wire Keychains" data-price="25">
       <img class="clickable-pic" src="4.png" alt="Handmade fuzzy wire keychains" tabindex="0" role="button" aria-expanded="false">
-      <p class="price">Starts at ₱25</p>
+      <div class="card-foot">
+        <p class="price">₱25</p>
+        <button type="button" class="add-btn" aria-label="Add Fuzzy Wire Keychains to cart">Add to cart</button>
+      </div>
       <div class="hidden-info">
         <h4>Fuzzy Wire Keychains</h4>
         <p>Soft and adorable. Handmade from fuzzy wires and shaped with care to brighten up your keys or bag.</p>
-        <p class="order-hint">Order via our Facebook page 💌</p>
       </div>
     </div>
 
-    <div class="product-card">
+    <div class="product-card" data-id="5" data-options="denim" data-name="Denim Keychains" data-price="40">
       <img class="clickable-pic" src="5.png" alt="Handmade recycled denim keychains" tabindex="0" role="button" aria-expanded="false">
-      <p class="price">Starts at ₱40</p>
+      <div class="card-foot">
+        <p class="price">₱40</p>
+        <button type="button" class="add-btn" aria-label="Add Denim Keychains to cart">Add to cart</button>
+      </div>
       <div class="hidden-info">
         <h4>Denim Keychains</h4>
         <p>Handmade from recycled denim, giving old jeans a cute new life. Sturdy, stylish, and one of a kind.</p>
-        <p class="order-hint">Order via our Facebook page 💌</p>
       </div>
     </div>
 
     <h2 id="bundles" class="section-title">BUNDLES</h2>
 
-    <div class="product-card">
+    <div class="product-card" data-id="b1" data-options="bouquet denim" data-name="Large Bouquet + Denim Keychain" data-price="430">
       <img class="clickable-pic" src="b1.png" alt="Large bouquet and denim keychain bundle" tabindex="0" role="button" aria-expanded="false">
-      <p class="price">Starts at ₱430</p>
+      <div class="card-foot">
+        <p class="price">₱430</p>
+        <button type="button" class="add-btn" aria-label="Add Large Bouquet + Denim Keychain to cart">Add to cart</button>
+      </div>
       <div class="hidden-info">
         <h4>Large Bouquet + Denim Keychain</h4>
         <p>Our biggest bouquet paired with a denim keychain. A complete gift set that's ready to give.</p>
-        <p class="order-hint">Order via our Facebook page 💌</p>
       </div>
     </div>
 
-    <div class="product-card">
+    <div class="product-card" data-id="b2" data-options="bouquet fuzzy" data-name="Large Bouquet + Fuzzy Wire Keychain" data-price="415">
       <img class="clickable-pic" src="b2.png" alt="Large bouquet and fuzzy wire keychain bundle" tabindex="0" role="button" aria-expanded="false">
-      <p class="price">Starts at ₱415</p>
+      <div class="card-foot">
+        <p class="price">₱415</p>
+        <button type="button" class="add-btn" aria-label="Add Large Bouquet + Fuzzy Wire Keychain to cart">Add to cart</button>
+      </div>
       <div class="hidden-info">
         <h4>Large Bouquet + Fuzzy Wire Keychain</h4>
         <p>A full bouquet with a matching fuzzy keychain. Twice the cuteness in one set.</p>
-        <p class="order-hint">Order via our Facebook page 💌</p>
       </div>
     </div>
 
-    <div class="product-card">
+    <div class="product-card" data-id="b3" data-options="bouquet denim" data-name="Bouquet + Denim Keychain" data-price="152">
       <img class="clickable-pic" src="b3.png" alt="Bouquet and denim keychain bundle" tabindex="0" role="button" aria-expanded="false">
-      <p class="price">Starts at ₱152</p>
+      <div class="card-foot">
+        <p class="price">₱152</p>
+        <button type="button" class="add-btn" aria-label="Add Bouquet + Denim Keychain to cart">Add to cart</button>
+      </div>
       <div class="hidden-info">
         <h4>Bouquet + Denim Keychain</h4>
         <p>Our classic bouquet with a recycled-denim keychain. A sweet and affordable gift duo.</p>
-        <p class="order-hint">Order via our Facebook page 💌</p>
       </div>
     </div>
 
-    <div class="product-card">
+    <div class="product-card" data-id="b4" data-options="bouquet fuzzy" data-name="Bouquet + Fuzzy Wire Keychain" data-price="137">
       <img class="clickable-pic" src="b4.png" alt="Bouquet and fuzzy wire keychain bundle" tabindex="0" role="button" aria-expanded="false">
-      <p class="price">Starts at ₱137</p>
+      <div class="card-foot">
+        <p class="price">₱137</p>
+        <button type="button" class="add-btn" aria-label="Add Bouquet + Fuzzy Wire Keychain to cart">Add to cart</button>
+      </div>
       <div class="hidden-info">
         <h4>Bouquet + Fuzzy Wire Keychain</h4>
         <p>A classic bouquet plus a soft fuzzy keychain. Small joys, beautifully paired.</p>
-        <p class="order-hint">Order via our Facebook page 💌</p>
       </div>
     </div>
 
-    <div class="product-card">
+    <div class="product-card" data-id="b5" data-options="bouquet denim" data-name="Mini Bouquet + Denim Keychain" data-price="85">
       <img class="clickable-pic" src="b5.png" alt="Mini bouquet and denim keychain bundle" tabindex="0" role="button" aria-expanded="false">
-      <p class="price">Starts at ₱85</p>
+      <div class="card-foot">
+        <p class="price">₱85</p>
+        <button type="button" class="add-btn" aria-label="Add Mini Bouquet + Denim Keychain to cart">Add to cart</button>
+      </div>
       <div class="hidden-info">
         <h4>Mini Bouquet + Denim Keychain</h4>
         <p>Our tiniest bouquet with a denim keychain. A perfect little gift set.</p>
-        <p class="order-hint">Order via our Facebook page 💌</p>
       </div>
     </div>
 
-    <div class="product-card">
+    <div class="product-card" data-id="b6" data-options="bouquet fuzzy" data-name="Mini Bouquet + Fuzzy Wire Keychain" data-price="70">
       <img class="clickable-pic" src="b6.png" alt="Mini bouquet and fuzzy wire keychain bundle" tabindex="0" role="button" aria-expanded="false">
-      <p class="price">Starts at ₱70</p>
+      <div class="card-foot">
+        <p class="price">₱70</p>
+        <button type="button" class="add-btn" aria-label="Add Mini Bouquet + Fuzzy Wire Keychain to cart">Add to cart</button>
+      </div>
       <div class="hidden-info">
         <h4>Mini Bouquet + Fuzzy Wire Keychain</h4>
         <p>A mini bouquet and a fuzzy keychain, both made to be cherished.</p>
-        <p class="order-hint">Order via our Facebook page 💌</p>
       </div>
     </div>
 
@@ -918,14 +1257,14 @@
   <div class="info-wrap">
     <div id="order" class="info-box">
       <h2>HOW TO ORDER 🛍️</h2>
-      <p>You can order at our Facebook page! Just follow these easy steps:</p>
+      <p>Ordering is easy. Just follow these steps:</p>
       <ul class="steps">
-        <li>1. Pick your favorite item</li>
-        <li>2. Send us a message on Facebook</li>
-        <li>3. We'll confirm the details with you</li>
+        <li>1. Tap "Add to cart" on your favorite items (pick your colors or design when asked)</li>
+        <li>2. Open your cart and enter your name and email</li>
+        <li>3. Place your order and we'll email your receipt with your order number</li>
       </ul>
-      <p class="custom-note">💜 Want a custom color or flower mix? Message us and we'll make it just for you!</p>
-      <a class="order-btn" href="https://www.facebook.com/profile.php?id=61582801926748" target="_blank" rel="noopener">Order on Facebook 💌</a>
+      <p class="custom-note">💜 Want a color that isn't on the list? Write it in the notes box when you check out and we'll let you know if we can make it!</p>
+      <button type="button" class="order-btn" data-open-cart>Open my cart 🛒</button>
     </div>
   </div>
 
@@ -940,6 +1279,105 @@
   </div>
 
   <div class="footer">© 2026 Handmei'd · Handmade with love</div>
+
+
+  <!-- CART DRAWER -->
+  <div class="cart-overlay" id="cartOverlay"></div>
+  <aside class="cart-drawer" id="cartDrawer" role="dialog" aria-modal="true" aria-labelledby="cartTitle" aria-hidden="true">
+    <div class="cart-head">
+      <h2 id="cartTitle">Your cart</h2>
+      <button type="button" class="cart-close" id="cartClose" aria-label="Close cart">✕</button>
+    </div>
+
+    <form id="checkoutForm" class="cart-form" novalidate>
+      <div class="cart-scroll">
+        <div id="cartItems"></div>
+
+        <div id="cartFields">
+          <h3 class="cart-sub">Where should we send your confirmation?</h3>
+
+          <label for="coName">Your name</label>
+          <input id="coName" type="text" autocomplete="name" maxlength="80" required>
+          <div class="field-error" id="coNameErr"></div>
+
+          <label for="coEmail">Email</label>
+          <input id="coEmail" type="email" autocomplete="email" maxlength="254" required>
+          <div class="field-error" id="coEmailErr"></div>
+
+          <fieldset class="opt-group pay-group">
+            <legend>Payment method</legend>
+            <div class="chips" id="coPayments"></div>
+          </fieldset>
+          <div class="field-error" id="coPayErr"></div>
+
+          <label for="coNotes">Notes (optional)</label>
+          <textarea id="coNotes" rows="3" maxlength="500" placeholder="Anything we should know? Pickup or delivery details, special requests…"></textarea>
+
+          <!-- Honeypot: real people never see or fill this -->
+          <div class="hp" aria-hidden="true">
+            <label>Leave this empty <input type="text" id="coWebsite" tabindex="-1" autocomplete="off"></label>
+          </div>
+        </div>
+
+        <div class="cart-status" id="cartStatus" role="alert"></div>
+      </div>
+
+      <div class="cart-foot" id="cartFoot">
+        <div class="cart-total"><span>Total</span><span id="cartTotal">₱0</span></div>
+        <p class="cart-note">We'll send payment instructions for your chosen method, and confirm pickup or delivery, after you place your order.</p>
+        <button type="submit" class="place-btn" id="placeBtn">Place order</button>
+      </div>
+    </form>
+
+    <div class="cart-done" id="cartDone" hidden>
+      <div class="done-emoji" aria-hidden="true">🩷</div>
+      <h3>Order received!</h3>
+      <p class="done-label">Your order number</p>
+      <p class="done-number" id="doneNumber"></p>
+      <p id="doneMsg"></p>
+      <div class="receipt-wrap" id="receiptWrap" hidden>
+        <img id="receiptImg" alt="Your Handmei'd receipt">
+        <a class="place-btn save-receipt" id="saveReceipt" download="handmeid-receipt.png">Save receipt as photo</a>
+        <p class="receipt-tip">Tip: you can also press and hold the receipt to save it.</p>
+      </div>
+      <button type="button" class="place-btn" id="doneBtn">Continue shopping</button>
+    </div>
+  </aside>
+
+  <!-- COLOR OPTIONS (bouquets) -->
+  <div class="opt-overlay" id="optOverlay"></div>
+  <div class="opt-sheet" id="optSheet" role="dialog" aria-modal="true" aria-labelledby="optTitle" aria-hidden="true">
+    <form id="optForm" novalidate>
+      <div class="opt-head">
+        <h2 id="optTitle">Choose your colors</h2>
+        <button type="button" class="cart-close" id="optClose" aria-label="Close">✕</button>
+      </div>
+      <fieldset class="opt-group" id="optFlowerGroup">
+        <legend>Flower colors <span>(pick as many as you like)</span></legend>
+        <div class="chips" id="optFlowers"></div>
+      </fieldset>
+      <fieldset class="opt-group" id="optWrapperGroup">
+        <legend>Wrapper color <span>(pick one)</span></legend>
+        <div class="chips" id="optWrappers"></div>
+      </fieldset>
+      <fieldset class="opt-group" id="optDesignGroup" hidden>
+        <legend>Keychain design <span>(pick one)</span></legend>
+        <div class="chips" id="optDesigns"></div>
+      </fieldset>
+      <fieldset class="opt-group" id="optDenimGroup" hidden>
+        <legend>Denim color <span>(pick one)</span></legend>
+        <div class="chips" id="optDenims"></div>
+      </fieldset>
+      <div class="opt-group" id="optMessageGroup" hidden>
+        <label for="optMessage" class="opt-label">Colors or ideas <span>(optional)</span></label>
+        <textarea id="optMessage" rows="3" maxlength="200" placeholder="Tell us the colors or idea you'd like, e.g. pastel pink with a little bow"></textarea>
+      </div>
+      <div class="field-error" id="optErr" role="alert"></div>
+      <button type="submit" class="place-btn" id="optAdd">Add to cart</button>
+    </form>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
   <!-- BACK TO TOP BUTTON -->
   <button class="back-to-top" id="backToTop" aria-label="Back to top">↑</button>
@@ -976,6 +1414,734 @@
     backToTop.addEventListener('click', function () {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     });
+  </script>
+
+  <!-- EmailJS (sends the order emails) -->
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4.4.1/dist/email.min.js"></script>
+
+  <script>
+    // ===== CART & CHECKOUT =====
+    (function () {
+
+      // ---- 1. FILL THESE IN (4 values from your EmailJS account) ----
+      var EMAILJS_CONFIG = {
+        publicKey: 'PJ8SIN7Vzp24o8d95',
+        serviceId: 'service_e70okgb',
+        templateId: 'template_yf8q5xn',
+        shopEmail: 'pawaysarah@gmail.com'   // where a copy of every order is sent to you
+      };
+      // ---------------------------------------------------------------
+
+      var STORAGE_KEY = 'handmeid_cart_v2';
+      var MAX_QTY = 20;
+
+      var FLOWER_COLORS = [
+        { name: 'Pink', hex: '#F7A8B8' },
+        { name: 'Light blue', hex: '#BFDDF5' },
+        { name: 'Purple', hex: '#C9A7E8' },
+        { name: 'Yellow', hex: '#F9E79F' },
+        { name: 'White', hex: '#FFFFFF' }
+      ];
+      var WRAPPER_COLORS = [
+        { name: 'White', hex: '#FFFFFF' },
+        { name: 'Blue', hex: '#9CC5E8' },
+        { name: 'Pink', hex: '#F7A8B8' },
+        { name: 'Green', hex: '#B7D7B0' }
+      ];
+      var DESIGNS = [{ name: 'Cake slice' }, { name: 'Flower' }, { name: 'Bunny' }];
+      var DENIM_COLORS = [
+        { name: 'Light wash', hex: '#B9D0E8' },
+        { name: 'Medium wash / regular denim', hex: '#5B7FA6' },
+        { name: 'Black', hex: '#2B2B2B' }
+      ];
+      var PAYMENT_METHODS = [{ name: 'GCash' }, { name: 'Maya' }, { name: 'PayPal' }];
+      function names(list) { return list.map(function (c) { return c.name; }); }
+
+      // Product list is read straight from the cards on the page
+      var products = {};
+      document.querySelectorAll('.product-card[data-id]').forEach(function (card) {
+        products[card.dataset.id] = {
+          id: card.dataset.id,
+          name: card.dataset.name,
+          price: Number(card.dataset.price),
+          img: card.querySelector('.clickable-pic').getAttribute('src'),
+          hasColors: (card.dataset.options || '').split(' ').indexOf('bouquet') !== -1,
+          hasDesign: (card.dataset.options || '').split(' ').indexOf('fuzzy') !== -1,
+          hasDenim: (card.dataset.options || '').split(' ').indexOf('denim') !== -1,
+          hasMessage: (card.dataset.options || '').split(' ').indexOf('fuzzy') !== -1,
+          hasOptions: !!card.dataset.options
+        };
+      });
+
+      var $ = function (id) { return document.getElementById(id); };
+      var drawer = $('cartDrawer'), overlay = $('cartOverlay'), form = $('checkoutForm');
+      var itemsBox = $('cartItems'), fields = $('cartFields'), foot = $('cartFoot');
+      var totalEl = $('cartTotal'), countEl = $('cartCount'), navCart = $('openCart');
+      var statusEl = $('cartStatus'), placeBtn = $('placeBtn'), doneBox = $('cartDone');
+      var closeBtn = $('cartClose'), toastEl = $('toast');
+      var nameInput = $('coName'), emailInput = $('coEmail'), notesInput = $('coNotes');
+      var optOverlay = $('optOverlay'), optSheet = $('optSheet'), optForm = $('optForm');
+      var optErr = $('optErr'), optTitle = $('optTitle'), optClose = $('optClose');
+      var lastFocus = null, optLastFocus = null, optProduct = null;
+      var pendingFocus = null, sending = false, toastTimer = null;
+
+      // ---- helpers ----
+      function peso(n) { return '₱' + n.toLocaleString('en-PH'); }
+      function el(tag, cls, text) {
+        var node = document.createElement(tag);
+        if (cls) node.className = cls;
+        if (text !== undefined) node.textContent = text;
+        return node;
+      }
+      function esc(s) {
+        return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+      }
+      function lineKey(l) { return [l.id, l.flowers.join(','), l.wrapper, l.design || '', l.denim || '', l.message || ''].join('|'); }
+      function optionParts(l) {
+        var parts = [];
+        if (l.flowers && l.flowers.length) parts.push('Flowers: ' + l.flowers.join(', '));
+        if (l.wrapper) parts.push('Wrapper: ' + l.wrapper);
+        if (l.design) parts.push('Design: ' + l.design);
+        if (l.denim) parts.push('Denim: ' + l.denim);
+        if (l.message) parts.push('Colors/ideas: ' + l.message);
+        return parts;
+      }
+
+      // ---- cart state (saved in the browser so it survives a refresh) ----
+      // cart = list of lines: { id, qty, flowers: [names], wrapper: name }
+      var cart = loadCart();
+
+      function loadCart() {
+        var clean = [];
+        try {
+          var saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+          if (!Array.isArray(saved)) saved = [];
+          saved.forEach(function (l) {
+            var p = l && products[l.id];
+            var q = Math.floor(Number(l && l.qty));
+            if (!p || !(q >= 1 && q <= MAX_QTY)) return;
+            var line = { id: l.id, qty: q, flowers: [], wrapper: '', design: '', denim: '', message: '' };
+            if (p.hasColors) {
+              line.flowers = names(FLOWER_COLORS).filter(function (n) { return (l.flowers || []).indexOf(n) !== -1; });
+              line.wrapper = names(WRAPPER_COLORS).indexOf(l.wrapper) !== -1 ? l.wrapper : '';
+              if (!line.flowers.length || !line.wrapper) return;
+            }
+            if (p.hasDesign) {
+              line.design = names(DESIGNS).indexOf(l.design) !== -1 ? l.design : '';
+              if (!line.design) return;
+            }
+            if (p.hasDenim) {
+              line.denim = names(DENIM_COLORS).indexOf(l.denim) !== -1 ? l.denim : '';
+              if (!line.denim) return;
+            }
+            if (p.hasMessage) line.message = String(l.message || '').slice(0, 200);
+            clean.push(line);
+          });
+        } catch (e) { /* storage unavailable: start with an empty cart */ }
+        return clean;
+      }
+      function saveCart() {
+        try { localStorage.setItem(STORAGE_KEY, JSON.stringify(cart)); } catch (e) {}
+      }
+      function findLine(key) {
+        for (var i = 0; i < cart.length; i++) if (lineKey(cart[i]) === key) return cart[i];
+        return null;
+      }
+      function itemCount() {
+        return cart.reduce(function (n, l) { return n + l.qty; }, 0);
+      }
+      function cartTotal() {
+        return cart.reduce(function (sum, l) { return sum + products[l.id].price * l.qty; }, 0);
+      }
+
+      function addLine(id, flowers, wrapper, design, denim, message) {
+        var line = { id: id, qty: 1, flowers: flowers, wrapper: wrapper, design: design || '', denim: denim || '', message: message || '' };
+        var existing = findLine(lineKey(line));
+        if (existing) existing.qty = Math.min(existing.qty + 1, MAX_QTY);
+        else cart.push(line);
+        saveCart(); render();
+        showToast('Added ' + products[id].name + ' to your cart');
+      }
+      function addToCart(id) {
+        if (!products[id]) return;
+        if (products[id].hasOptions) openOptions(id);
+        else addLine(id, [], '', '', '', '');
+      }
+      function setQty(key, qty, focusKind) {
+        var l = findLine(key);
+        if (!l) return;
+        if (qty < 1) return removeItem(key);
+        l.qty = Math.min(qty, MAX_QTY);
+        pendingFocus = { key: key, kind: focusKind };
+        saveCart(); render();
+      }
+      function removeItem(key) {
+        cart = cart.filter(function (l) { return lineKey(l) !== key; });
+        pendingFocus = null;
+        saveCart(); render();
+        if (!itemCount()) closeBtn.focus();
+      }
+
+      // ---- drawing the cart ----
+      function qtyButton(label, aria, key, kind, disabled, onClick) {
+        var b = el('button', '', label);
+        b.type = 'button';
+        b.setAttribute('aria-label', aria);
+        b.dataset.key = key; b.dataset.kind = kind;
+        b.disabled = disabled;
+        b.addEventListener('click', onClick);
+        return b;
+      }
+
+      function render() {
+        var empty = cart.length === 0;
+        itemsBox.textContent = '';
+
+        if (empty) {
+          itemsBox.appendChild(el('p', 'cart-empty', 'Your cart is empty. Tap "Add to cart" on any product to start your order.'));
+        }
+        cart.forEach(function (l) {
+          var p = products[l.id], q = l.qty, key = lineKey(l);
+          var row = el('div', 'cart-item');
+
+          var img = document.createElement('img');
+          img.src = p.img; img.alt = '';
+
+          var info = el('div', 'cart-item-info');
+          info.appendChild(el('div', 'cart-item-name', p.name));
+          info.appendChild(el('div', 'cart-item-price', peso(p.price) + ' each'));
+          optionParts(l).forEach(function (part) { info.appendChild(el('div', 'cart-item-opts', part)); });
+          var qty = el('div', 'qty');
+          qty.appendChild(qtyButton('−', 'Decrease quantity of ' + p.name, key, 'dec', q <= 1,
+            function () { setQty(key, q - 1, 'dec'); }));
+          qty.appendChild(el('span', 'qty-num', String(q)));
+          qty.appendChild(qtyButton('+', 'Increase quantity of ' + p.name, key, 'inc', q >= MAX_QTY,
+            function () { setQty(key, q + 1, 'inc'); }));
+          info.appendChild(qty);
+
+          var side = el('div', 'cart-item-side');
+          side.appendChild(el('div', 'cart-item-line', peso(p.price * q)));
+          var rm = el('button', 'cart-remove', 'Remove');
+          rm.type = 'button';
+          rm.setAttribute('aria-label', 'Remove ' + p.name + ' from cart');
+          rm.addEventListener('click', function () { removeItem(key); });
+          side.appendChild(rm);
+
+          row.appendChild(img); row.appendChild(info); row.appendChild(side);
+          itemsBox.appendChild(row);
+        });
+
+        fields.hidden = empty;
+        foot.hidden = empty;
+        totalEl.textContent = peso(cartTotal());
+        var n = itemCount();
+        countEl.textContent = String(n);
+        navCart.setAttribute('aria-label', 'Open cart, ' + n + (n === 1 ? ' item' : ' items'));
+
+        if (pendingFocus) {
+          var all = itemsBox.querySelectorAll('button[data-key]');
+          var target = null;
+          Array.prototype.forEach.call(all, function (b) {
+            if (b.dataset.key === pendingFocus.key && b.dataset.kind === pendingFocus.kind) target = b;
+          });
+          if (!target || target.disabled) {
+            target = null;
+            Array.prototype.forEach.call(all, function (b) {
+              if (b.dataset.key === pendingFocus.key && b.dataset.kind === 'inc') target = b;
+            });
+          }
+          if (target && !target.disabled) target.focus();
+          pendingFocus = null;
+        }
+      }
+
+      // ---- cart open / close ----
+      function showForm() {
+        doneBox.hidden = true;
+        form.hidden = false;
+      }
+      function isOpen() { return drawer.classList.contains('open'); }
+      function optIsOpen() { return optSheet.classList.contains('open'); }
+
+      function openCart() {
+        if (!doneBox.hidden) showForm();
+        lastFocus = document.activeElement;
+        statusEl.textContent = '';
+        drawer.classList.add('open');
+        overlay.classList.add('show');
+        drawer.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+        closeBtn.focus();
+      }
+      function closeCart() {
+        drawer.classList.remove('open');
+        overlay.classList.remove('show');
+        drawer.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+        if (lastFocus && lastFocus.focus) lastFocus.focus();
+      }
+
+      function showToast(msg) {
+        toastEl.textContent = msg;
+        toastEl.classList.add('show');
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(function () { toastEl.classList.remove('show'); }, 1800);
+      }
+
+      // ---- color picker for bouquets ----
+      function buildChips(container, type, list, groupName) {
+        container.textContent = '';
+        list.forEach(function (c, i) {
+          var label = el('label', 'chip');
+          var input = document.createElement('input');
+          input.type = type; input.name = groupName; input.value = c.name;
+          var face = el('span', 'chip-face');
+          if (c.hex) { var sw = el('span', 'swatch'); sw.style.background = c.hex; face.appendChild(sw); }
+          face.appendChild(el('span', '', c.name));
+          label.appendChild(input); label.appendChild(face);
+          container.appendChild(label);
+        });
+      }
+      buildChips($('optFlowers'), 'checkbox', FLOWER_COLORS, 'flower');
+      buildChips($('optWrappers'), 'radio', WRAPPER_COLORS, 'wrapper');
+      buildChips($('optDenims'), 'radio', DENIM_COLORS, 'denim');
+      buildChips($('optDesigns'), 'radio', DESIGNS, 'design');
+      buildChips($('coPayments'), 'radio', PAYMENT_METHODS, 'payment');
+      $('coPayments').addEventListener('change', function () { $('coPayErr').textContent = ''; });
+
+      function openOptions(id) {
+        optProduct = products[id];
+        optTitle.textContent = 'Choose options: ' + optProduct.name;
+        optForm.querySelectorAll('input').forEach(function (i) { i.checked = false; });
+        $('optMessage').value = '';
+        $('optFlowerGroup').hidden = !optProduct.hasColors;
+        $('optWrapperGroup').hidden = !optProduct.hasColors;
+        $('optDesignGroup').hidden = !optProduct.hasDesign;
+        $('optDenimGroup').hidden = !optProduct.hasDenim;
+        $('optMessageGroup').hidden = !optProduct.hasMessage;
+        optErr.textContent = '';
+        optLastFocus = document.activeElement;
+        optSheet.classList.add('open');
+        optOverlay.classList.add('show');
+        optSheet.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+        var first = optForm.querySelector('fieldset:not([hidden]) input') || $('optMessage');
+        if (first) first.focus();
+      }
+      function closeOptions() {
+        optSheet.classList.remove('open');
+        optOverlay.classList.remove('show');
+        optSheet.setAttribute('aria-hidden', 'true');
+        if (!isOpen()) document.body.style.overflow = '';
+        if (optLastFocus && optLastFocus.focus) optLastFocus.focus();
+        optProduct = null;
+      }
+      optClose.addEventListener('click', closeOptions);
+      optOverlay.addEventListener('click', closeOptions);
+      optForm.addEventListener('change', function () { optErr.textContent = ''; });
+      optForm.addEventListener('submit', function (e) {
+        e.preventDefault();
+        if (!optProduct) return;
+        var p = optProduct, flowers = [], wrapper = '', design = '', denim = '', message = '';
+        if (p.hasColors) {
+          var picked = {};
+          optForm.querySelectorAll('input[name="flower"]:checked').forEach(function (i) { picked[i.value] = true; });
+          flowers = names(FLOWER_COLORS).filter(function (n) { return picked[n]; });
+          var w = optForm.querySelector('input[name="wrapper"]:checked');
+          if (!flowers.length) { optErr.textContent = 'Please pick at least one flower color.'; return; }
+          if (!w) { optErr.textContent = 'Please pick a wrapper color.'; return; }
+          wrapper = w.value;
+        }
+        if (p.hasDesign) {
+          var d = optForm.querySelector('input[name="design"]:checked');
+          if (!d) { optErr.textContent = 'Please pick a keychain design.'; return; }
+          design = d.value;
+        }
+        if (p.hasDenim) {
+          var dn = optForm.querySelector('input[name="denim"]:checked');
+          if (!dn) { optErr.textContent = 'Please pick a denim color.'; return; }
+          denim = dn.value;
+        }
+        if (p.hasMessage) message = $('optMessage').value.replace(/\s+/g, ' ').trim();
+        var id = p.id;
+        closeOptions();
+        addLine(id, flowers, wrapper, design, denim, message);
+      });
+
+      document.addEventListener('click', function (e) {
+        var add = e.target.closest('.add-btn');
+        if (add) {
+          var card = add.closest('.product-card');
+          if (card) addToCart(card.dataset.id);
+          return;
+        }
+        if (e.target.closest('#openCart, [data-open-cart]')) openCart();
+      });
+      closeBtn.addEventListener('click', closeCart);
+      overlay.addEventListener('click', closeCart);
+      $('doneBtn').addEventListener('click', closeCart);
+
+      document.addEventListener('keydown', function (e) {
+        var box = optIsOpen() ? optSheet : (isOpen() ? drawer : null);
+        if (!box) return;
+        if (e.key === 'Escape') { if (box === optSheet) closeOptions(); else closeCart(); return; }
+        if (e.key !== 'Tab') return;
+        // keep keyboard focus inside the open panel
+        var focusable = Array.prototype.filter.call(
+          box.querySelectorAll('button, input, textarea, a[href]'),
+          function (n) { return !n.disabled && n.tabIndex !== -1 && n.getClientRects().length > 0; }
+        );
+        if (!focusable.length) return;
+        var first = focusable[0], last = focusable[focusable.length - 1];
+        if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+        else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+      });
+
+      // ---- checkout ----
+      function isConfigured() {
+        var c = EMAILJS_CONFIG;
+        return [c.publicKey, c.serviceId, c.templateId, c.shopEmail]
+          .every(function (v) { return v && v.indexOf('YOUR_') !== 0; });
+      }
+
+      function makeOrderNumber() {
+        var d = new Date();
+        var pad = function (n) { return (n < 10 ? '0' : '') + n; };
+        var chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+        var code = '';
+        var rnd = new Uint32Array(4);
+        if (window.crypto && crypto.getRandomValues) crypto.getRandomValues(rnd);
+        else for (var i = 0; i < 4; i++) rnd[i] = Math.floor(Math.random() * 4294967295);
+        for (var j = 0; j < 4; j++) code += chars[rnd[j] % chars.length];
+        return 'HM-' + String(d.getFullYear()).slice(2) + pad(d.getMonth() + 1) + pad(d.getDate()) + '-' + code;
+      }
+
+      // ---- the receipt, as an email (looks like a paper receipt) ----
+      function receiptHtml(o, forShop) {
+        var mono = "'Courier New',Courier,monospace";
+        var rule = '<div style="border-top:2px dashed #cdb6bb;margin:14px 0;height:0;line-height:0;font-size:0;">&nbsp;</div>';
+        var meta = function (k, v) {
+          return '<tr><td style="padding:2px 0;color:#7b6c70;">' + k + '</td><td align="right" style="padding:2px 0;">' + v + '</td></tr>';
+        };
+        var h = '';
+        h += '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#fdf1f3;"><tr><td align="center" style="padding:24px 12px;">';
+        h += '<div style="max-width:360px;margin:0 auto;background:#ffffff;border:1px solid #ead0d5;border-radius:6px;padding:26px 22px;text-align:left;font-family:' + mono + ';font-size:14px;color:#4d4144;">';
+        h += '<div style="text-align:center;font-size:24px;font-weight:bold;letter-spacing:2px;color:#a85f70;">HANDMEI\'D</div>';
+        h += '<div style="text-align:center;font-size:12px;color:#7b6c70;margin-top:4px;">Handmade with love &amp; passion</div>';
+        h += '<div style="text-align:center;font-size:13px;font-weight:bold;letter-spacing:3px;margin-top:14px;">' + (forShop ? 'NEW ORDER' : 'ORDER RECEIPT') + '</div>';
+        h += rule;
+        h += '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="font-size:13px;">';
+        h += meta('Order no.', '<b>' + esc(o.id) + '</b>');
+        h += meta('Date', esc(o.date));
+        h += meta('Name', esc(o.name));
+        if (forShop) h += meta('Email', esc(o.email));
+        h += meta('Payment', esc(o.payment));
+        h += '</table>';
+        h += rule;
+        h += '<table role="presentation" width="100%" cellpadding="0" cellspacing="0">';
+        o.lines.forEach(function (l) {
+          h += '<tr><td style="padding:8px 8px 0 0;font-weight:bold;" valign="top">' + esc(l.name) + '</td>' +
+               '<td align="right" valign="top" style="padding:8px 0 0;white-space:nowrap;font-weight:bold;">' + peso(l.line) + '</td></tr>';
+          h += '<tr><td colspan="2" style="padding:0;font-size:12px;color:#7b6c70;">' + l.qty + ' x ' + peso(l.unit) + '</td></tr>';
+          optionParts(l).forEach(function (part) {
+            h += '<tr><td colspan="2" style="padding:0;font-size:12px;color:#7b6c70;">' + esc(part) + '</td></tr>';
+          });
+        });
+        h += '</table>';
+        h += rule;
+        h += '<table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>' +
+             '<td style="font-size:17px;font-weight:bold;">TOTAL</td>' +
+             '<td align="right" style="font-size:17px;font-weight:bold;">' + peso(o.total) + '</td></tr></table>';
+        if (o.notes) {
+          h += rule;
+          h += '<div style="font-size:12px;color:#7b6c70;">Notes</div>';
+          h += '<div style="font-size:13px;margin-top:2px;">' + esc(o.notes).replace(/\n/g, '<br>') + '</div>';
+        }
+        h += rule;
+        if (forShop) {
+          h += '<div style="text-align:center;font-size:12px;color:#7b6c70;">Reply to this email to reach the customer.</div>';
+        } else {
+          h += '<div style="text-align:center;font-size:15px;font-weight:bold;">Thank you, ' + esc(o.name) + '!</div>';
+          h += '<div style="text-align:center;font-size:12px;color:#7b6c70;margin-top:6px;line-height:1.5;">We\'ll send payment instructions for your chosen method and confirm pickup or delivery. Please keep your order number.</div>';
+        }
+        h += '</div></td></tr></table>';
+        return h;
+      }
+
+      // ---- the receipt, as a photo (PNG) shown after ordering ----
+      function drawReceipt(o) {
+        var W = 380, S = 2;
+        var mono = "'Courier New', Courier, monospace";
+        var L = 38, R = W - 38;
+
+        function content(ctx) {
+          var y = 58;
+          function setFont(w, size, fam) { ctx.font = w + ' ' + size + 'px ' + (fam || mono); }
+          function text(str, x, yy, align, color) {
+            ctx.textAlign = align || 'left'; ctx.fillStyle = color || '#4d4144'; ctx.fillText(str, x, yy);
+          }
+          function rule() {
+            y += 8;
+            ctx.save();
+            ctx.setLineDash([6, 4]); ctx.strokeStyle = '#cdb6bb'; ctx.lineWidth = 1.5;
+            ctx.beginPath(); ctx.moveTo(L, y); ctx.lineTo(R, y); ctx.stroke();
+            ctx.restore();
+            y += 20;
+          }
+          function wrap(str, maxW) {
+            var words = String(str).split(/\s+/), lines = [], cur = '';
+            words.forEach(function (w) {
+              // break very long words
+              while (ctx.measureText(w).width > maxW && w.length > 1) {
+                var k = w.length - 1;
+                while (k > 1 && ctx.measureText(w.slice(0, k)).width > maxW) k--;
+                if (cur) { lines.push(cur); cur = ''; }
+                lines.push(w.slice(0, k)); w = w.slice(k);
+              }
+              var test = cur ? cur + ' ' + w : w;
+              if (ctx.measureText(test).width > maxW && cur) { lines.push(cur); cur = w; }
+              else cur = test;
+            });
+            if (cur) lines.push(cur);
+            return lines;
+          }
+          function heart(cx, cy, s, color) {
+            ctx.save();
+            ctx.fillStyle = color;
+            ctx.beginPath();
+            ctx.moveTo(cx, cy + s * 0.9);
+            ctx.bezierCurveTo(cx - s * 1.5, cy - s * 0.1, cx - s * 0.7, cy - s * 1.0, cx, cy - s * 0.3);
+            ctx.bezierCurveTo(cx + s * 0.7, cy - s * 1.0, cx + s * 1.5, cy - s * 0.1, cx, cy + s * 0.9);
+            ctx.fill();
+            ctx.restore();
+          }
+
+          setFont('bold', 26, "Fredoka, 'Quicksand', sans-serif");
+          text("HANDMEI'D", W / 2, y, 'center', '#a85f70');
+          y += 22;
+          heart(W / 2, y, 7, '#F7A8B8');
+          y += 26;
+          setFont('normal', 12);
+          text('Handmade with love & passion', W / 2, y, 'center', '#7b6c70');
+          y += 26;
+          setFont('bold', 13);
+          text('ORDER RECEIPT', W / 2, y, 'center');
+          rule();
+
+          function meta(k, v) {
+            setFont('normal', 13);
+            text(k, L, y, 'left', '#7b6c70');
+            setFont('bold', 13);
+            var lines = wrap(v, cw - 78);
+            lines.forEach(function (ln, i) { text(ln, R, y + i * 17, 'right'); });
+            y += Math.max(1, lines.length) * 17 + 3;
+          }
+          var cw = R - L;
+          meta('Order no.', o.id);
+          meta('Date', o.date);
+          meta('Name', o.name);
+          meta('Payment', o.payment);
+          rule();
+
+          o.lines.forEach(function (l) {
+            setFont('bold', 13);
+            var nameLines = wrap(l.name, cw - 80);
+            nameLines.forEach(function (ln, i) { text(ln, L, y + i * 17, 'left'); });
+            text(peso(l.line), R, y, 'right');
+            y += nameLines.length * 17;
+            setFont('normal', 12);
+            text(l.qty + ' x ' + peso(l.unit), L, y, 'left', '#7b6c70');
+            y += 16;
+            optionParts(l).forEach(function (part) {
+              wrap(part, cw).forEach(function (ln) { text(ln, L, y, 'left', '#7b6c70'); y += 16; });
+            });
+            y += 8;
+          });
+          rule();
+
+          setFont('bold', 18);
+          text('TOTAL', L, y, 'left');
+          text(peso(o.total), R, y, 'right');
+          y += 6;
+
+          if (o.notes) {
+            rule();
+            setFont('normal', 12);
+            text('Notes', L, y, 'left', '#7b6c70'); y += 17;
+            setFont('normal', 13);
+            wrap(o.notes.replace(/\s+/g, ' '), cw).slice(0, 8).forEach(function (ln) { text(ln, L, y, 'left'); y += 17; });
+          }
+          rule();
+
+          setFont('bold', 15);
+          wrap('Thank you, ' + o.name + '!', cw).forEach(function (ln) { text(ln, W / 2, y, 'center'); y += 20; });
+          y += 2;
+          setFont('normal', 12);
+          wrap("We'll send payment instructions and confirm pickup or delivery.", cw).forEach(function (ln) { text(ln, W / 2, y, 'center', '#7b6c70'); y += 16; });
+          return y + 30;
+        }
+
+        // pass 1: measure the height; pass 2: draw for real
+        var scratch = document.createElement('canvas');
+        scratch.width = W * S; scratch.height = 2000 * S;
+        var sctx = scratch.getContext('2d'); sctx.setTransform(S, 0, 0, S, 0, 0);
+        var H = Math.ceil(content(sctx)) + 16;
+
+        var c = document.createElement('canvas');
+        c.width = W * S; c.height = H * S;
+        var ctx = c.getContext('2d'); ctx.setTransform(S, 0, 0, S, 0, 0);
+        ctx.fillStyle = '#fdf1f3'; ctx.fillRect(0, 0, W, H);
+
+        // paper with zigzag top and bottom edges
+        var px1 = 14, px2 = W - 14, top = 14, bot = H - 14, tooth = 8;
+        ctx.save();
+        ctx.shadowColor = 'rgba(95,80,83,0.18)'; ctx.shadowBlur = 10; ctx.shadowOffsetY = 2;
+        ctx.fillStyle = '#ffffff';
+        ctx.beginPath();
+        ctx.moveTo(px1, top);
+        for (var x = px1, up = false; x < px2; x += tooth, up = !up) ctx.lineTo(Math.min(x + tooth / 2, px2), up ? top : top + 6);
+        ctx.lineTo(px2, top);
+        ctx.lineTo(px2, bot);
+        for (var x2 = px2, up2 = false; x2 > px1; x2 -= tooth, up2 = !up2) ctx.lineTo(Math.max(x2 - tooth / 2, px1), up2 ? bot : bot - 6);
+        ctx.lineTo(px1, bot);
+        ctx.closePath(); ctx.fill();
+        ctx.restore();
+
+        content(ctx);
+        return c.toDataURL('image/png');
+      }
+
+      function setError(input, errEl, msg) {
+        errEl.textContent = msg;
+        if (msg) input.setAttribute('aria-invalid', 'true'); else input.removeAttribute('aria-invalid');
+      }
+      nameInput.addEventListener('input', function () { setError(nameInput, $('coNameErr'), ''); });
+      emailInput.addEventListener('input', function () { setError(emailInput, $('coEmailErr'), ''); });
+
+      function validate() {
+        var ok = true, firstBad = null;
+        var name = nameInput.value.trim(), email = emailInput.value.trim();
+        setError(nameInput, $('coNameErr'), '');
+        setError(emailInput, $('coEmailErr'), '');
+        $('coPayErr').textContent = '';
+        if (!name) {
+          setError(nameInput, $('coNameErr'), 'Please enter your name.');
+          ok = false; firstBad = firstBad || nameInput;
+        }
+        if (!email) {
+          setError(emailInput, $('coEmailErr'), 'Please enter your email so we can send your receipt.');
+          ok = false; firstBad = firstBad || emailInput;
+        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) {
+          setError(emailInput, $('coEmailErr'), 'That email doesn\'t look right. Example: name@example.com');
+          ok = false; firstBad = firstBad || emailInput;
+        }
+        if (!form.querySelector('input[name="payment"]:checked')) {
+          $('coPayErr').textContent = 'Please choose a payment method.';
+          ok = false; firstBad = firstBad || form.querySelector('input[name="payment"]');
+        }
+        if (firstBad) firstBad.focus();
+        return ok;
+      }
+
+      function showDone(order, confirmationSent) {
+        $('doneNumber').textContent = order.id;
+        $('doneMsg').textContent = confirmationSent
+          ? 'We sent your receipt to ' + order.email + '. If you don\'t see it in a few minutes, check your spam folder. We\'ll send payment instructions and confirm pickup or delivery.'
+          : 'We received your order, but your receipt email didn\'t go through. Please save the receipt below and keep your order number. We\'ll contact you at ' + order.email + ' to confirm your order.';
+
+        var wrapBox = $('receiptWrap');
+        try {
+          var png = drawReceipt(order);
+          $('receiptImg').src = png;
+          var a = $('saveReceipt');
+          a.href = png; a.setAttribute('download', 'handmeid-receipt-' + order.id + '.png');
+          wrapBox.hidden = false;
+        } catch (err) {
+          console.error('Could not draw receipt image', err);
+          wrapBox.hidden = true;
+        }
+
+        form.hidden = true;
+        doneBox.hidden = false;
+        doneBox.scrollTop = 0;
+        $('doneBtn').focus();
+      }
+
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        if (sending) return;
+        if ($('coWebsite').value) return;               // bots fill the hidden field
+        if (!itemCount()) return;
+        statusEl.textContent = '';
+        if (!validate()) return;
+
+        if (!isConfigured() || !window.emailjs) {
+          statusEl.textContent = 'Checkout isn\'t available right now. Please try again later.';
+          console.error('Checkout not configured: fill in EMAILJS_CONFIG in order.html (and make sure the EmailJS script loaded).');
+          return;
+        }
+
+        var order = {
+          id: makeOrderNumber(),
+          date: new Date().toLocaleString('en-PH', { dateStyle: 'medium', timeStyle: 'short', timeZone: 'Asia/Manila' }),
+          name: nameInput.value.trim(),
+          email: emailInput.value.trim(),
+          payment: form.querySelector('input[name="payment"]:checked').value,
+          notes: notesInput.value.trim(),
+          lines: cart.map(function (l) {
+            var p = products[l.id];
+            return { name: p.name, qty: l.qty, unit: p.price, line: p.price * l.qty, flowers: l.flowers.slice(), wrapper: l.wrapper, design: l.design, denim: l.denim, message: l.message };
+          }),
+          total: cartTotal()
+        };
+
+        var shopParams = {
+          to_email: EMAILJS_CONFIG.shopEmail,
+          reply_to: order.email,
+          shop_name: 'Handmei\'d',
+          subject: 'New order ' + order.id + ' from ' + order.name,
+          receipt_html: receiptHtml(order, true)
+        };
+        var customerParams = {
+          to_email: order.email,
+          reply_to: EMAILJS_CONFIG.shopEmail,
+          shop_name: 'Handmei\'d',
+          subject: 'Your Handmei\'d receipt ' + order.id,
+          receipt_html: receiptHtml(order, false)
+        };
+        var opts = { publicKey: EMAILJS_CONFIG.publicKey };
+
+        sending = true;
+        placeBtn.disabled = true;
+        placeBtn.textContent = 'Sending your order…';
+
+        // 1) Tell the shop first, so an order is never lost.
+        emailjs.send(EMAILJS_CONFIG.serviceId, EMAILJS_CONFIG.templateId, shopParams, opts)
+          .then(function () {
+            // 2) Then send the customer's receipt.
+            return emailjs.send(EMAILJS_CONFIG.serviceId, EMAILJS_CONFIG.templateId, customerParams, opts)
+              .then(function () { return true; }, function (err) { console.error('Receipt email failed', err); return false; });
+          })
+          .then(function (confirmationSent) {
+            cart = []; saveCart(); render();
+            nameInput.value = ''; emailInput.value = ''; notesInput.value = '';
+            form.querySelectorAll('input[name="payment"]').forEach(function (i) { i.checked = false; });
+            showDone(order, confirmationSent);
+          })
+          .catch(function (err) {
+            console.error('Order failed', err);
+            statusEl.textContent = 'We couldn\'t send your order. Please check your connection and try again.';
+          })
+          .then(function () {
+            sending = false;
+            placeBtn.disabled = false;
+            placeBtn.textContent = 'Place order';
+          });
+      });
+
+      render();
+    })();
   </script>
 
 </body>
